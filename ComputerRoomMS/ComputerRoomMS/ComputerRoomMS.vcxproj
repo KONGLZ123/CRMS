@@ -1,0 +1,322 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{8018B01B-FA51-4980-8A02-200C83BD2F29}</ProjectGuid>
+    <RootNamespace>ComputerRoomMS</RootNamespace>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <Keyword>MFCProj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+    <UseOfMfc>Static</UseOfMfc>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+    <UseOfMfc>Static</UseOfMfc>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+    <UseOfMfc>Dynamic</UseOfMfc>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+    <UseOfMfc>Dynamic</UseOfMfc>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>E:\MFC_CODE\ComputerRoomMS\ComputerRoomMS\include;E:\MFC_CODE\ComputerRoomMS\ComputerRoomMS\jsoncpp\include\json;$(IncludePath)</IncludePath>
+    <LibraryPath>E:\MFC_CODE\ComputerRoomMS\ComputerRoomMS\Debug;E:\MFC_CODE\ComputerRoomMS\ComputerRoomMS\jsoncpp;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <IncludePath>E:\MFC_CODE\ComputerRoomMS\ComputerRoomMS\include;E:\MFC_CODE\ComputerRoomMS\ComputerRoomMS\jsoncpp\include\json;$(IncludePath)</IncludePath>
+    <LibraryPath>E:\MFC_CODE\ComputerRoomMS\ComputerRoomMS\Release;E:\MFC_CODE\ComputerRoomMS\ComputerRoomMS\jsoncpp;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>false</SDLCheck>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <IgnoreSpecificDefaultLibraries>
+      </IgnoreSpecificDefaultLibraries>
+    </Link>
+    <Midl>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <ValidateAllParameters>true</ValidateAllParameters>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0804</Culture>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+    </Link>
+    <Midl>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <ValidateAllParameters>true</ValidateAllParameters>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0804</Culture>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>false</SDLCheck>
+      <DebugInformationFormat>None</DebugInformationFormat>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <IgnoreSpecificDefaultLibraries>
+      </IgnoreSpecificDefaultLibraries>
+    </Link>
+    <Midl>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <ValidateAllParameters>true</ValidateAllParameters>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0804</Culture>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>_WINDOWS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+    <Midl>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <ValidateAllParameters>true</ValidateAllParameters>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0804</Culture>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="AddPersonDlg.h" />
+    <ClInclude Include="AGLinkCtrl.h" />
+    <ClInclude Include="AnnounceDlg.h" />
+    <ClInclude Include="AssetsHandoverDlg.h" />
+    <ClInclude Include="ButtonCtrl.h" />
+    <ClInclude Include="CApplication.h" />
+    <ClInclude Include="CApplication0.h" />
+    <ClInclude Include="CBookmark0.h" />
+    <ClInclude Include="CBookmarks.h" />
+    <ClInclude Include="CCell.h" />
+    <ClInclude Include="CCells.h" />
+    <ClInclude Include="CColumn.h" />
+    <ClInclude Include="CColumns0.h" />
+    <ClInclude Include="CDocument0.h" />
+    <ClInclude Include="CDocuments.h" />
+    <ClInclude Include="CFont0.h" />
+    <ClInclude Include="ComputerRoomMS.h" />
+    <ClInclude Include="CRange.h" />
+    <ClInclude Include="CRange0.h" />
+    <ClInclude Include="CRow.h" />
+    <ClInclude Include="CRows.h" />
+    <ClInclude Include="CSelection.h" />
+    <ClInclude Include="CTable0.h" />
+    <ClInclude Include="CTables0.h" />
+    <ClInclude Include="CWorkbook.h" />
+    <ClInclude Include="CWorkbooks.h" />
+    <ClInclude Include="CWorksheet.h" />
+    <ClInclude Include="CWorksheets.h" />
+    <ClInclude Include="data.h" />
+    <ClInclude Include="LoginDlg.h" />
+    <ClInclude Include="DlgMain.h" />
+    <ClInclude Include="ListCtrlOwner.h" />
+    <ClInclude Include="PersonInfo.h" />
+    <ClInclude Include="RegisterDlg.h" />
+    <ClInclude Include="RepairDlg.h" />
+    <ClInclude Include="RequestRoomDlg.h" />
+    <ClInclude Include="Resource.h" />
+    <ClInclude Include="RoomFaultDlg.h" />
+    <ClInclude Include="RoomManageDlg.h" />
+    <ClInclude Include="RoomRunningReportDlg.h" />
+    <ClInclude Include="SalaryCheckDlg.h" />
+    <ClInclude Include="ScheduleAdjustDlg.h" />
+    <ClInclude Include="ScheduleDlg.h" />
+    <ClInclude Include="SearchResultDlg.h" />
+    <ClInclude Include="ServerSetupDlg.h" />
+    <ClInclude Include="SetupAdminDlg.h" />
+    <ClInclude Include="SetupPwdDlg.h" />
+    <ClInclude Include="SocketClient.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="StudentInfoDlg.h" />
+    <ClInclude Include="StudentManageDlg.h" />
+    <ClInclude Include="targetver.h" />
+    <ClInclude Include="UseReportDlg.h" />
+    <ClInclude Include="ViewAnnounceDlg.h" />
+    <ClInclude Include="ViewExamDlg.h" />
+    <ClInclude Include="ViewExamResultDlg.h" />
+    <ClInclude Include="ViewInfoDlg.h" />
+    <ClInclude Include="ViewReigstRequestDlg.h" />
+    <ClInclude Include="ViewRepairDlg.h" />
+    <ClInclude Include="WinThreadDatabase.h" />
+    <ClInclude Include="WinThreadNet.h" />
+    <ClInclude Include="WorkloadDlg.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="AddPersonDlg.cpp" />
+    <ClCompile Include="AGLinkCtrl.cpp" />
+    <ClCompile Include="AnnounceDlg.cpp" />
+    <ClCompile Include="AssetsHandoverDlg.cpp" />
+    <ClCompile Include="ButtonCtrl.cpp" />
+    <ClCompile Include="ComputerRoomMS.cpp" />
+    <ClCompile Include="LoginDlg.cpp" />
+    <ClCompile Include="DlgMain.cpp" />
+    <ClCompile Include="ListCtrlOwner.cpp" />
+    <ClCompile Include="PersonInfo.cpp" />
+    <ClCompile Include="RegisterDlg.cpp" />
+    <ClCompile Include="RepairDlg.cpp" />
+    <ClCompile Include="RequestRoomDlg.cpp" />
+    <ClCompile Include="RoomFaultDlg.cpp" />
+    <ClCompile Include="RoomManageDlg.cpp" />
+    <ClCompile Include="RoomRunningReportDlg.cpp" />
+    <ClCompile Include="SalaryCheckDlg.cpp" />
+    <ClCompile Include="ScheduleAdjustDlg.cpp" />
+    <ClCompile Include="ScheduleDlg.cpp" />
+    <ClCompile Include="SearchResultDlg.cpp" />
+    <ClCompile Include="ServerSetupDlg.cpp" />
+    <ClCompile Include="SetupAdminDlg.cpp" />
+    <ClCompile Include="SetupPwdDlg.cpp" />
+    <ClCompile Include="SocketClient.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="StudentInfoDlg.cpp" />
+    <ClCompile Include="StudentManageDlg.cpp" />
+    <ClCompile Include="UseReportDlg.cpp" />
+    <ClCompile Include="ViewAnnounceDlg.cpp" />
+    <ClCompile Include="ViewExamDlg.cpp" />
+    <ClCompile Include="ViewExamResultDlg.cpp" />
+    <ClCompile Include="ViewInfoDlg.cpp" />
+    <ClCompile Include="ViewReigstRequestDlg.cpp" />
+    <ClCompile Include="ViewRepairDlg.cpp" />
+    <ClCompile Include="WinThreadDatabase.cpp" />
+    <ClCompile Include="WinThreadNet.cpp" />
+    <ClCompile Include="WorkloadDlg.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="ComputerRoomMS.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\ComputerRoomMS.rc2" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\ComputerRoomMS.ico" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties RESOURCE_FILE="ComputerRoomMS.rc" />
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>

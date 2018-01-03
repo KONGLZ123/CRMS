@@ -1,0 +1,346 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Thread">
+      <UniqueIdentifier>{36260054-5321-4e00-8650-f443e03ed34d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common">
+      <UniqueIdentifier>{3634528e-adb6-475b-ba9d-52046958e9fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UI">
+      <UniqueIdentifier>{1c55ec08-f21e-4f2e-b9d8-e89fdbdf0ecb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UI\Dialog">
+      <UniqueIdentifier>{4af81f78-a7ad-459e-86ed-8f000e56d9ba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UI\Ctrl">
+      <UniqueIdentifier>{6bc786db-57f3-41bb-8538-488c49300e45}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Extend">
+      <UniqueIdentifier>{08bff3c7-ef2b-4a54-b810-6d58a711faf3}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="WinThreadNet.h">
+      <Filter>Thread</Filter>
+    </ClInclude>
+    <ClInclude Include="AddPersonDlg.h">
+      <Filter>UI\Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="AnnounceDlg.h">
+      <Filter>UI\Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="ButtonCtrl.h">
+      <Filter>UI\Ctrl</Filter>
+    </ClInclude>
+    <ClInclude Include="AGLinkCtrl.h">
+      <Filter>UI\Ctrl</Filter>
+    </ClInclude>
+    <ClInclude Include="AssetsHandoverDlg.h">
+      <Filter>UI\Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="ComputerRoomMS.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="data.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="DlgMain.h">
+      <Filter>UI\Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="ListCtrlOwner.h">
+      <Filter>UI\Ctrl</Filter>
+    </ClInclude>
+    <ClInclude Include="LoginDlg.h">
+      <Filter>UI\Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="PersonInfo.h">
+      <Filter>UI\Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="RegisterDlg.h">
+      <Filter>UI\Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="RepairDlg.h">
+      <Filter>UI\Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="RequestRoomDlg.h">
+      <Filter>UI\Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="RoomFaultDlg.h">
+      <Filter>UI\Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="RoomManageDlg.h">
+      <Filter>UI\Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="RoomRunningReportDlg.h">
+      <Filter>UI\Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="SalaryCheckDlg.h">
+      <Filter>UI\Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="ScheduleAdjustDlg.h">
+      <Filter>UI\Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="ScheduleDlg.h">
+      <Filter>UI\Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="SetupAdminDlg.h">
+      <Filter>UI\Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="SetupPwdDlg.h">
+      <Filter>UI\Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="StudentInfoDlg.h">
+      <Filter>UI\Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="StudentManageDlg.h">
+      <Filter>UI\Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="UseReportDlg.h">
+      <Filter>UI\Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="ViewAnnounceDlg.h">
+      <Filter>UI\Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="ViewExamDlg.h">
+      <Filter>UI\Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="ViewExamResultDlg.h">
+      <Filter>UI\Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="ViewInfoDlg.h">
+      <Filter>UI\Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="ViewReigstRequestDlg.h">
+      <Filter>UI\Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="ViewRepairDlg.h">
+      <Filter>UI\Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="WorkloadDlg.h">
+      <Filter>UI\Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="WinThreadDatabase.h">
+      <Filter>Thread</Filter>
+    </ClInclude>
+    <ClInclude Include="SocketClient.h">
+      <Filter>Thread</Filter>
+    </ClInclude>
+    <ClInclude Include="SearchResultDlg.h">
+      <Filter>UI\Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="ServerSetupDlg.h">
+      <Filter>UI\Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="CApplication.h">
+      <Filter>Extend</Filter>
+    </ClInclude>
+    <ClInclude Include="CApplication0.h">
+      <Filter>Extend</Filter>
+    </ClInclude>
+    <ClInclude Include="CBookmark0.h">
+      <Filter>Extend</Filter>
+    </ClInclude>
+    <ClInclude Include="CBookmarks.h">
+      <Filter>Extend</Filter>
+    </ClInclude>
+    <ClInclude Include="CCell.h">
+      <Filter>Extend</Filter>
+    </ClInclude>
+    <ClInclude Include="CCells.h">
+      <Filter>Extend</Filter>
+    </ClInclude>
+    <ClInclude Include="CColumn.h">
+      <Filter>Extend</Filter>
+    </ClInclude>
+    <ClInclude Include="CColumns0.h">
+      <Filter>Extend</Filter>
+    </ClInclude>
+    <ClInclude Include="CDocument0.h">
+      <Filter>Extend</Filter>
+    </ClInclude>
+    <ClInclude Include="CDocuments.h">
+      <Filter>Extend</Filter>
+    </ClInclude>
+    <ClInclude Include="CFont0.h">
+      <Filter>Extend</Filter>
+    </ClInclude>
+    <ClInclude Include="CRange.h">
+      <Filter>Extend</Filter>
+    </ClInclude>
+    <ClInclude Include="CRange0.h">
+      <Filter>Extend</Filter>
+    </ClInclude>
+    <ClInclude Include="CRow.h">
+      <Filter>Extend</Filter>
+    </ClInclude>
+    <ClInclude Include="CRows.h">
+      <Filter>Extend</Filter>
+    </ClInclude>
+    <ClInclude Include="CSelection.h">
+      <Filter>Extend</Filter>
+    </ClInclude>
+    <ClInclude Include="CTable0.h">
+      <Filter>Extend</Filter>
+    </ClInclude>
+    <ClInclude Include="CTables0.h">
+      <Filter>Extend</Filter>
+    </ClInclude>
+    <ClInclude Include="CWorkbook.h">
+      <Filter>Extend</Filter>
+    </ClInclude>
+    <ClInclude Include="CWorkbooks.h">
+      <Filter>Extend</Filter>
+    </ClInclude>
+    <ClInclude Include="CWorksheet.h">
+      <Filter>Extend</Filter>
+    </ClInclude>
+    <ClInclude Include="CWorksheets.h">
+      <Filter>Extend</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="WinThreadNet.cpp">
+      <Filter>Thread</Filter>
+    </ClCompile>
+    <ClCompile Include="WinThreadDatabase.cpp">
+      <Filter>Thread</Filter>
+    </ClCompile>
+    <ClCompile Include="AddPersonDlg.cpp">
+      <Filter>UI\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="AGLinkCtrl.cpp">
+      <Filter>UI\Ctrl</Filter>
+    </ClCompile>
+    <ClCompile Include="AnnounceDlg.cpp">
+      <Filter>UI\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="AssetsHandoverDlg.cpp">
+      <Filter>UI\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="DlgMain.cpp">
+      <Filter>UI\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="LoginDlg.cpp">
+      <Filter>UI\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="RegisterDlg.cpp">
+      <Filter>UI\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="PersonInfo.cpp">
+      <Filter>UI\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="RepairDlg.cpp">
+      <Filter>UI\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="RequestRoomDlg.cpp">
+      <Filter>UI\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="RoomFaultDlg.cpp">
+      <Filter>UI\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="RoomManageDlg.cpp">
+      <Filter>UI\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="RoomRunningReportDlg.cpp">
+      <Filter>UI\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="SalaryCheckDlg.cpp">
+      <Filter>UI\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="ScheduleAdjustDlg.cpp">
+      <Filter>UI\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="ScheduleDlg.cpp">
+      <Filter>UI\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="SetupAdminDlg.cpp">
+      <Filter>UI\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="SetupPwdDlg.cpp">
+      <Filter>UI\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="ButtonCtrl.cpp">
+      <Filter>UI\Ctrl</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="ComputerRoomMS.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="ListCtrlOwner.cpp">
+      <Filter>UI\Ctrl</Filter>
+    </ClCompile>
+    <ClCompile Include="StudentInfoDlg.cpp">
+      <Filter>UI\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="StudentManageDlg.cpp">
+      <Filter>UI\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="UseReportDlg.cpp">
+      <Filter>UI\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="ViewAnnounceDlg.cpp">
+      <Filter>UI\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="ViewExamDlg.cpp">
+      <Filter>UI\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="ViewExamResultDlg.cpp">
+      <Filter>UI\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="ViewInfoDlg.cpp">
+      <Filter>UI\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="ViewReigstRequestDlg.cpp">
+      <Filter>UI\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="ViewRepairDlg.cpp">
+      <Filter>UI\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="WorkloadDlg.cpp">
+      <Filter>UI\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="SocketClient.cpp">
+      <Filter>Thread</Filter>
+    </ClCompile>
+    <ClCompile Include="SearchResultDlg.cpp">
+      <Filter>UI\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="ServerSetupDlg.cpp">
+      <Filter>UI\Dialog</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="ComputerRoomMS.rc">
+      <Filter>资源文件</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\ComputerRoomMS.rc2">
+      <Filter>资源文件</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\ComputerRoomMS.ico">
+      <Filter>资源文件</Filter>
+    </Image>
+  </ItemGroup>
+</Project>
