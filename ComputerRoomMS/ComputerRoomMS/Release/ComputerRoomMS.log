@@ -1,0 +1,50 @@
+﻿  stdafx.cpp
+  AddPersonDlg.cpp
+  AGLinkCtrl.cpp
+  AnnounceDlg.cpp
+  AssetsHandoverDlg.cpp
+  ButtonCtrl.cpp
+  ComputerRoomMS.cpp
+  LoginDlg.cpp
+  DlgMain.cpp
+  ListCtrlOwner.cpp
+  PersonInfo.cpp
+  RegisterDlg.cpp
+  RepairDlg.cpp
+  RequestRoomDlg.cpp
+  RoomFaultDlg.cpp
+  RoomManageDlg.cpp
+  RoomRunningReportDlg.cpp
+  SalaryCheckDlg.cpp
+  ScheduleAdjustDlg.cpp
+  ScheduleDlg.cpp
+  SearchResultDlg.cpp
+  正在编译...
+  ServerSetupDlg.cpp
+  SetupAdminDlg.cpp
+  SetupPwdDlg.cpp
+  SocketClient.cpp
+  StudentInfoDlg.cpp
+  StudentManageDlg.cpp
+  UseReportDlg.cpp
+  ViewAnnounceDlg.cpp
+  ViewExamDlg.cpp
+  ViewExamResultDlg.cpp
+  ViewInfoDlg.cpp
+  ViewReigstRequestDlg.cpp
+  ViewRepairDlg.cpp
+  WinThreadDatabase.cpp
+WinThreadDatabase.cpp(152): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  C:\Program Files (x86)\Windows Kits\10\Include\10.0.10240.0\ucrt\stdio.h(1769): note: 参见“sprintf”的声明
+  WinThreadNet.cpp
+WinThreadNet.cpp(105): warning C4996: 'inet_addr': Use inet_pton() or InetPton() instead or define _WINSOCK_DEPRECATED_NO_WARNINGS to disable deprecated API warnings
+  C:\Program Files (x86)\Windows Kits\8.1\Include\um\winsock2.h(1850): note: 参见“inet_addr”的声明
+  WorkloadDlg.cpp
+json_vc71_libmtd.lib(json_writer.obj) : warning LNK4075: 忽略“/EDITANDCONTINUE”(由于“/OPT:ICF”规范)
+  正在生成代码
+  0 of 3357 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    0 functions had inline decision re-evaluated but remain unchanged
+  已完成代码的生成
+  ComputerRoomMS.vcxproj -> E:\MFC_CODE\ComputerRoomMS\ComputerRoomMS\Release\ComputerRoomMS.exe
+  ComputerRoomMS.vcxproj -> E:\MFC_CODE\ComputerRoomMS\ComputerRoomMS\Release\ComputerRoomMS.pdb (Full PDB)
