@@ -137,6 +137,8 @@ struct TEACHER_INFO
     CString name;
     CString tel;
     int authority;
+    CString classes;
+    CString course;
 };
 
 struct STUDETN_INFO
@@ -153,6 +155,16 @@ struct STUDETN_INFO
     int authority;
     //int attendece_cnt;      // 出勤次数
     //int attendece_score;    // 考勤分数
+};
+
+struct ATTENDENCE_INFO
+{
+    CString student_id;
+    CString student_name;
+    CString course_name;
+    CString teacher_name;
+    int attendece_cnt;      // 出勤次数
+    int attendece_score;    // 考勤分数
 };
 
 struct WORKLOAD_REPORT
@@ -285,6 +297,7 @@ struct DATA_STOCK
 
     vector<WORKLOAD_REPORT>         vecSalaryInfo;
     vector<ASSERT_DATA>             vecAssertDataInfo;
+    vector<ATTENDENCE_INFO>         vecAttendenceInfo;
 
     set<CString>                    setClass;   // 班级集合
 };

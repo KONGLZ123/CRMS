@@ -174,16 +174,18 @@ void CListCtrlOwner::OnLButtonDown(UINT nFlags, CPoint point)
                 CString ItemText;
                 m_EditItem.GetWindowText(ItemText);
 
-                STUDETN_INFO *pStuInfo = new STUDETN_INFO;
+                ATTENDENCE_INFO *pAttendenceInfo = new ATTENDENCE_INFO;
                 USES_CONVERSION;
-                //pStuInfo->attendece_cnt = atoi(W2A(this->GetItemText(m_Row, 3)));
-                //pStuInfo->attendece_score = atoi(W2A(this->GetItemText(m_Row, 4)));
+                
 
                 this->SetItemText(m_Row, m_Col, ItemText);
 
-                pStuInfo->student_id = this->GetItemText(m_Row, 1);
-                ::SendMessage(this->GetParent()->m_hWnd, WM_UPDATE_STUDENT_LIST_ITEM, (WPARAM)pStuInfo, 0);
-                PostThreadMessage(m_pDbThread->m_nThreadID, WM_UPDATE_EXAM_INFO, (WPARAM)pStuInfo, 0);
+                pAttendenceInfo->student_id = this->GetItemText(m_Row, 1);
+                pAttendenceInfo->attendece_cnt = atoi(W2A(this->GetItemText(m_Row, 3)));
+                pAttendenceInfo->attendece_score = atoi(W2A(this->GetItemText(m_Row, 4)));
+
+                //::SendMessage(this->GetParent()->m_hWnd, WM_UPDATE_STUDENT_LIST_ITEM, (WPARAM)pStuInfo, 0);
+                PostThreadMessage(m_pDbThread->m_nThreadID, WM_UPDATE_EXAM_INFO, (WPARAM)pAttendenceInfo, 0);
             }
         }
         m_Col = m_Row = -1;

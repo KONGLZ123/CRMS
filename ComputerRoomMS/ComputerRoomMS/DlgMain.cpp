@@ -501,6 +501,17 @@ LRESULT CDlgMain::OnInitDataSuccess(WPARAM wParam, LPARAM lParam)
                 m_roomFaultDlg.SetCurUserName(pDataStock->vecTeacherInfo.at(i).name);
                 m_requestRoomDlg.SetCurUserName(pDataStock->vecTeacherInfo.at(i).name);
 
+                vector<ATTENDENCE_INFO> vecAttendenceInfo;
+                for (UINT j = 0; j < pDataStock->vecAttendenceInfo.size(); ++j) {
+                    if (pDataStock->vecAttendenceInfo.at(j).teacher_name == 
+                        pDataStock->vecTeacherInfo.at(i).name) {
+                        vecAttendenceInfo.push_back(pDataStock->vecAttendenceInfo.at(j));
+                    }
+                }
+
+                m_studentManageDlg.SetStudentInfo(vecAttendenceInfo);
+                m_studentManageDlg.SetClassName(pDataStock->vecTeacherInfo.at(i).classes);
+
                 CString strResult = _T("нч╫А╧Ш");
                 for (UINT i = 0; i < pDataStock->vecReportData.size(); i++)
                 {
@@ -531,9 +542,6 @@ LRESULT CDlgMain::OnInitDataSuccess(WPARAM wParam, LPARAM lParam)
             }
         }
 
-
-        m_studentManageDlg.SetStudentInfo(pDataStock->vecStudentInfo);
-        m_studentManageDlg.SetClassName(pDataStock->setClass);
         m_viewAnnounceDlg.SetAnnounceData(pDataStock->vecAnnounceData);
         m_scheduleDlg.SetScheduleInfo(pDataStock->vecScheduleData);
     }
@@ -560,6 +568,16 @@ LRESULT CDlgMain::OnInitDataSuccess(WPARAM wParam, LPARAM lParam)
             {
                 m_studentInfoDlg.SetStudentInfo(pDataStock->vecStudentInfo.at(i));
                 m_viewExamDlg.SetCurStuClass(pDataStock->vecStudentInfo.at(i).classes);
+
+                vector<ATTENDENCE_INFO> vecAttendenceInfo;
+                for (UINT j = 0; j < pDataStock->vecAttendenceInfo.size(); ++j) {
+                    if (pDataStock->vecAttendenceInfo.at(j).student_id ==
+                        pDataStock->vecStudentInfo.at(i).student_id) {
+                        vecAttendenceInfo.push_back(pDataStock->vecAttendenceInfo.at(j));
+                    }
+                }
+                m_viewExamResultDlg.SetAttendenceInfo(vecAttendenceInfo);
+                
                 break;
             }
         }
