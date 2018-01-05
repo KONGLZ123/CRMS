@@ -625,16 +625,12 @@ void CLoginDlg::PraseJson(char * buf)
         break;
         case S_CODE_UPDATE_EXAM_INFO:
         {
-            //STUDETN_INFO *pStuInfo = new STUDETN_INFO;
-            //USES_CONVERSION;
-            //pStuInfo->attendece_cnt = atoi(W2A(this->GetItemText(m_Row, 3)));
-            //pStuInfo->attendece_score = atoi(W2A(this->GetItemText(m_Row, 4)));
+            ATTENDENCE_INFO *pAttendenceInfo = new ATTENDENCE_INFO;
+            pAttendenceInfo->student_id = root["student_id"].asCString();
+            pAttendenceInfo->attendece_cnt = root["attendece_cnt"].asInt();
+            pAttendenceInfo->attendece_score = root["attendece_score"].asInt();
 
-            //this->SetItemText(m_Row, m_Col, ItemText);
-
-            //pStuInfo->student_id = this->GetItemText(m_Row, 1);
-
-            //PostThreadMessage(m_pThreadDatabase->m_nThreadID, WM_UPDATE_EXAM_INFO, (WPARAM)pReportData, 0);
+            PostThreadMessage(m_pThreadDatabase->m_nThreadID, WM_UPDATE_EXAM_INFO, (WPARAM)pAttendenceInfo, 0);
         }
         break;
         case S_CODE_UPDATE_SALARY_INFO:

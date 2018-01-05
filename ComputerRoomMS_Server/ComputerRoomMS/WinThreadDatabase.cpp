@@ -96,6 +96,7 @@ BEGIN_MESSAGE_MAP(CWinThreadDatabase, CWinThread)
     ON_THREAD_MESSAGE(WM_UPDATE_ROOM_REQUEST, OnUpdateRoomRequest)
     ON_THREAD_MESSAGE(WM_UPDATE_SALARY_INFO, OnUpdateSalaryInfo)
     ON_THREAD_MESSAGE(WM_ADD_PERSON, OnAddPerson)
+    ON_THREAD_MESSAGE(WM_UPDATE_EXAM_INFO, OnUpdateExamInfo)
 END_MESSAGE_MAP()
 
 BOOL CWinThreadDatabase::InitInstance()
@@ -189,6 +190,9 @@ void CWinThreadDatabase::OnInitData(WPARAM wParam, LPARAM lParam)
 
     SelectStudentInfoFromDb(pDataStock->vecStudentInfo, tmpArr);
     root["studentInfo"] = tmpArr;
+
+    SelectAttendenceInfoFromDb(pDataStock->vecAttendenceInfo, tmpArr);
+    root["attendenceInfo"] = tmpArr;
 
     SelectReportDataFromDb(pDataStock->vecReportData, tmpArr);
     root["reportInfo"] = tmpArr;
@@ -302,12 +306,25 @@ void CWinThreadDatabase::OnAddPerson(WPARAM wParam, LPARAM lParam)
             break;
         }
         case TEACHER: {
-            sprintf(szTemp,
-                "INSERT t_teacher_info(teacher_id, pwd, user_name, tel, authority) VALUES('%s', '%s', '%s', '%s', %d); \
-                INSERT t_classes(classes_id, teacher_id) VALUES('%s', '%s'); \
-                INSERT t_course(course_id, teacher_id) VALUES('%s', '%s'); ",
-                pAccount, pPwd, pName, pTel, auth, pGrade, pAccount, pCourse, pAccount);
-            break;
+            sprintf(szTemp, "INSERT t_teacher_info(teacher_id, pwd, teacher_name, tel, authority) VALUES('%s', '%s', '%s', '%s', %d);",
+                pAccount, pPwd, pName, pTel, auth);
+            int res = mysql_real_query(&m_mysql, szTemp, (unsigned long)strlen(szTemp));//插入数据
+            if (0 != res)
+                ::MessageBox(NULL, _T("InsertNewAccountToDb faied！"), _T("错误"), MB_OK);
+
+            sprintf(szTemp, "INSERT t_classes(classes_id, teacher_id) VALUES('%s', '%s'); ", pGrade, pAccount);
+            res = mysql_real_query(&m_mysql, szTemp, (unsigned long)strlen(szTemp));//插入数据
+            if (0 != res)
+                ::MessageBox(NULL, _T("InsertNewAccountToDb faied！"), _T("错误"), MB_OK);
+
+            sprintf(szTemp, "INSERT t_course(course_id, teacher_id) VALUES('%s', '%s'); ", pCourse, pAccount);
+            res = mysql_real_query(&m_mysql, szTemp, (unsigned long)strlen(szTemp));//插入数据
+            if (0 != res)
+                ::MessageBox(NULL, _T("InsertNewAccountToDb faied！"), _T("错误"), MB_OK);
+
+            delete ptagAddPerson;
+            ptagAddPerson = NULL;
+            return;
         }
         case STUDENT: {
             char *pTmp = "SET FOREIGN_KEY_CHECKS = 0";
@@ -618,6 +635,26 @@ void CWinThreadDatabase::OnUpdateSalaryInfo(WPARAM wParam, LPARAM lParam)
 
     delete pWorkload;
     pWorkload = NULL;
+}
+
+void CWinThreadDatabase::OnUpdateExamInfo(WPARAM wParam, LPARAM lParam)
+{
+    ATTENDENCE_INFO *pStuInfo = reinterpret_cast<ATTENDENCE_INFO *>(wParam);
+
+    USES_CONVERSION;
+    char* pStuId = W2A(pStuInfo->student_id);
+
+    char szTemp[200];
+    sprintf(szTemp, UPDATE_ATTENDENCE_DATE, pStuInfo->attendece_cnt, pStuInfo->attendece_score, pStuId);
+    int res = mysql_real_query(&m_mysql, szTemp, (unsigned long)strlen(szTemp));//插入数据
+    if (0 != res)
+    {
+        ::MessageBox(NULL, _T("OnUpdateSalaryInfo faied！"), _T("错误"), MB_OK);
+        //return FALSE;
+    };
+
+    delete pStuInfo;
+    pStuInfo = NULL;
 }
 
 BOOL CWinThreadDatabase::GetLoginData(LOGIN_REQUEST *ptagLoginRequest)
@@ -964,6 +1001,12 @@ BOOL CWinThreadDatabase::SelectTeacherInfoFromDb(vector<TEACHER_INFO> &vecTeache
                 case 4:
                     root["authority"] = atoi(sqlRow[i]);
                     break;
+                case 5:
+                    root["classes_id"] = NotNull(sqlRow[i]);
+                    break;
+                case 6:
+                    root["course_id"] = NotNull(sqlRow[i]);
+                    break;
                 default:
                     break;
                 }
@@ -1041,6 +1084,72 @@ BOOL CWinThreadDatabase::SelectStudentInfoFromDb(vector<STUDETN_INFO> &vecStuden
             } 
             vec.append(root);
             vecStudentInfo.push_back(studentInfo);
+        }
+
+        mysql_free_result(mysqlResutl);
+    }
+    else
+    {
+        ::MessageBox(NULL, _T("mysql_store_result faied！"), _T("错误"), MB_OK);
+        return FALSE;
+    }
+
+    return TRUE;
+}
+
+BOOL CWinThreadDatabase::SelectAttendenceInfoFromDb(vector<ATTENDENCE_INFO>& vecAttendenceInfo, Json::Value & vec)
+{
+    vecAttendenceInfo.clear();
+    vec.clear();
+
+    MYSQL_RES *mysqlResutl;
+    MYSQL_ROW sqlRow;
+
+    char *pSql = SELECT_ATTENDENCE_INFO;
+    int res = mysql_real_query(&m_mysql, pSql, (unsigned long)strlen(pSql));//插入数据
+    if (0 != res)
+    {
+        ::MessageBox(NULL, _T("SelectAttendenceInfoFromDb faied！"), _T("错误"), MB_OK);
+        return FALSE;
+    }
+
+    Json::Value root;
+    mysqlResutl = mysql_store_result(&m_mysql); // 保存查询的所有数据
+    if (NULL != mysqlResutl)
+    {
+        int j = mysql_num_fields(mysqlResutl);	 // 获取列数
+        while (sqlRow = mysql_fetch_row(mysqlResutl))    //获取具体的数据
+        {
+            ATTENDENCE_INFO attendeceInfo;
+            for (int i = 0; i < j; i++)
+            {
+                USES_CONVERSION;
+                switch (i)
+                {
+                case 0:
+                    root["student_id"] = NotNull(sqlRow[i]);
+                    break;
+                case 1:
+                    root["course_name"] = NotNull(sqlRow[i]);
+                    break;
+                case 2:
+                    root["teacher_name"] = NotNull(sqlRow[i]);
+                    break;
+                case 3:
+                    root["attendece_cnt"] = atoi(sqlRow[i]);
+                    break;
+                case 4:
+                    root["attendece_score"] = atoi(sqlRow[i]);
+                    break;
+                case 5:
+                    root["student_name"] = NotNull(sqlRow[i]);
+                    break;
+                default:
+                    break;
+                }
+            }
+            vec.append(root);
+            vecAttendenceInfo.push_back(attendeceInfo);
         }
 
         mysql_free_result(mysqlResutl);

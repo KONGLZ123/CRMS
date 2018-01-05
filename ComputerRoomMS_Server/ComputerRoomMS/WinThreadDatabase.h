@@ -54,6 +54,7 @@ private:
     void OnInsertAssertData(WPARAM wParam, LPARAM lParam);
     void OnUpdateRoomRequest(WPARAM wParam, LPARAM lParam);
     void OnUpdateSalaryInfo(WPARAM wParam, LPARAM lParam);
+    void OnUpdateExamInfo(WPARAM wParam, LPARAM lParam);
 
     BOOL GetLoginData(LOGIN_REQUEST *ptagLoginRequest);
     void CheckPwd(LOGIN_REQUEST *ptagLoginRequest);
@@ -62,6 +63,7 @@ private:
     BOOL SelectRoomRepairInfoFromDb(vector<ROOM_REPAIR_INFO> &vecRepairInfo, Json::Value &vec);
     BOOL SelectTeacherInfoFromDb(vector<TEACHER_INFO> &vecTeacherInfo, Json::Value &vec);
     BOOL SelectStudentInfoFromDb(vector<STUDETN_INFO> &vecStudentInfo, Json::Value &vec);
+    BOOL SelectAttendenceInfoFromDb(vector<ATTENDENCE_INFO> &vecAttendenceInfo, Json::Value &vec);
     BOOL SelectScheduleFromDb(vector<SCHEDULE_DATA> &vecSheduleInfo, Json::Value &vec);
     BOOL SelectReportDataFromDb(vector<REPORT_DATA> &vecReportData, Json::Value &vec);
     BOOL SelectAnnounceFromDb(vector<ANNOUNCE_DATA> &vecAnnounceData, Json::Value &vec);

@@ -154,6 +154,16 @@ struct STUDETN_INFO
     int attendece_score;    // 考勤分数
 };
 
+struct ATTENDENCE_INFO
+{
+    CString student_id;
+    CString course_name;
+    CString teacher_name;
+    int attendece_cnt;      // 出勤次数
+    int attendece_score;    // 考勤分数
+    CString student_name;
+};
+
 enum REPORT_TYPE {
     RUNING_REPORT = 0,
     USE_REPORT,
@@ -258,6 +268,8 @@ struct DATA_STOCK
 
     vector<WORKLOAD_REPORT>         vecSalaryInfo;
     vector<ASSERT_DATA>             vecAssertDataInfo;
+
+    vector<ATTENDENCE_INFO>         vecAttendenceInfo;
 };
 
 
@@ -278,8 +290,10 @@ struct DATA_STOCK
 #define SELECT_ADMIN_INFO           "SELECT id, account, pwd FROM t_sysadmin_info"
 #define SELECT_ROOM_MANAGER_INFO    "SELECT id, manager_id, pwd, user_name, tel, authority FROM t_manager_info"
 #define SELECT_ROOM_REPAIR_INFO     "SELECT id, repair_id, pwd, user_name, tel, authority FROM t_repair_info"
-#define SELECT_TEACHER_INFO         "SELECT teacher_id, pwd, teacher_name, tel, authority FROM t_teacher_info"
+#define SELECT_TEACHER_INFO         "SELECT t.teacher_id, t.pwd, t.teacher_name, t.tel, t.authority, cl.classes_id, c.course_id FROM t_teacher_info t, t_course c, t_classes cl WHERE t.teacher_id = c.teacher_id AND t.teacher_id = cl.teacher_id"
 #define SELECT_STUDENT_INFO         "SELECT student_id, pwd, user_name, sex, tel, class_id, major, authority FROM t_student_info"
+#define SELECT_ATTENDENCE_INFO      "SELECT t.`student_id`, c.course_id, te.`teacher_name`, sc.attendance_num, sc.`score`, t.user_name FROM t_course c, t_student_course sc, t_student_info t, t_teacher_info te WHERE c.`course_id` = sc.`course_id` AND sc.`student_id` = t.`student_id` AND te.teacher_id = c.`teacher_id`;"
+
 #define SELECT_REPORT_DATA          "SELECT id, report_type, submit_person, upload_date, room_id, reason, notes, is_view FROM t_report"
 #define SELECT_WORKLOAD_DATE        "SELECT user_name, request_date, fix_salary, workload_salary, reason FROM t_workload_salary"
 #define SELECT_ANNOUNCE_DATA        "SELECT announce_id, announce_text, authority FROM t_announce"
@@ -315,10 +329,10 @@ struct DATA_STOCK
 #define UPDATE_CLASS34_DATA         "UPDATE t_shedules SET class_34 = '%s' WHERE week = %d && day = %d"
 #define UPDATE_CLASS56_DATA         "UPDATE t_shedules SET class_56 = '%s' WHERE week = %d && day = %d"
 #define UPDATE_CLASS78_DATA         "UPDATE t_shedules SET class_78 = '%s' WHERE week = %d && day = %d"
-#define UPDATE_PERSONS_INFO         "UPDATE %s SET %s = '%s', pwd = '%s', user_name = '%s', tel = '%s', authority = %d WHERE %s = '%s'"
+#define UPDATE_PERSONS_INFO         "UPDATE %s SET %s = '%s', pwd = '%s', teacher_name = '%s', tel = '%s', authority = %d WHERE %s = '%s'"
 #define UPDATE_ROOM_REQUEST         "UPDATE t_report SET is_view = %d WHERE submit_person = '%s' && upload_date = '%s'"
 #define UPDATE_SALARY_DATE          "UPDATE t_workload_salary SET workload_salary = %s, is_view = %d WHERE user_name = '%s' && request_date = '%s'"
-
+#define UPDATE_ATTENDENCE_DATE      "UPDATE t_student_course SET attendance_num = %d, score = %d WHERE student_id = '%s'"
 
 
 ///////////////////////////////////////////////////////////////////
