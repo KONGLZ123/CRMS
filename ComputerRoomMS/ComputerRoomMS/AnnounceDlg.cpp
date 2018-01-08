@@ -96,15 +96,19 @@ void CAnnounceDlg::OnBnClickedBtnAnnounce()
 
 void CAnnounceDlg::OnBnClickedBtnDelAnnounce()
 {
-    PostThreadMessage(m_pDbThread->m_nThreadID, WM_DEL_ANNOUNCE, (WPARAM)m_pageIndex + 1, (LPARAM)m_hWnd);
-
+    CString strText;
+    GetDlgItem(IDC_EDIT_OLD_ANNOUNCE)->GetWindowText(strText);
     vector<ANNOUNCE_DATA>::iterator ite;
-    for (ite = m_vecAnnounceData.begin(); ite != m_vecAnnounceData.end(); ++ite) {
-        if (ite->announce_id == m_pageIndex + 1)
-        {
-            //m_vecAnnounceData.erase(ite);
-            ite->strText = _T("公告已删除");
+    for (ite = m_vecAnnounceData.begin(); ite != m_vecAnnounceData.end(); ) {
+        if (ite->strText == strText) {
+            PostThreadMessage(m_pDbThread->m_nThreadID, WM_DEL_ANNOUNCE, (WPARAM)ite->announce_id, (LPARAM)m_hWnd);
+            
+            m_vecAnnounceData.erase(ite);
             GetDlgItem(IDC_EDIT_OLD_ANNOUNCE)->SetWindowText(_T("公告已删除"));
+            break;
+        }
+        else {
+            ++ite;
         }
     }
 }

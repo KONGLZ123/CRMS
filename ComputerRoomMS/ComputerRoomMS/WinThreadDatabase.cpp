@@ -434,7 +434,7 @@ void CWinThreadDatabase::OnUpdateSalaryInfo(WPARAM wParam, LPARAM lParam)
     root["code"] = S_CODE_UPDATE_SALARY_INFO;
     root["name"] = W2A(pWorkload->strName);
     root["date"] = W2A(pWorkload->strDate);
-    root["workload"] = W2A(pWorkload->strWorkloadSalary);
+    root["result"] = pWorkload->result;
     root["is_view"] = pWorkload->isView;
 
     SendMsgToServer(root);
@@ -792,8 +792,8 @@ BOOL CWinThreadDatabase::SelectWorkloadSalaryInfoFromDb(vector<WORKLOAD_REPORT>&
         salaryInfo.strName = root["salaryInfo"][i]["name"].asCString();
         salaryInfo.strReason = root["salaryInfo"][i]["reason"].asCString();
         salaryInfo.strWorkloadSalary = root["salaryInfo"][i]["workload_salary"].asCString();
-        salaryInfo.result = root["salaryInfo"][i]["workload_salary"].asInt();
-        salaryInfo.isView = root["salaryInfo"][i]["workload_salary"].asInt();
+        salaryInfo.result = root["salaryInfo"][i]["result"].asInt();
+        salaryInfo.isView = root["salaryInfo"][i]["is_view"].asInt();
 
         vecSalaryInfo.push_back(salaryInfo);
     }
