@@ -68,6 +68,7 @@ struct WORKLOAD_REPORT
     CString strWorkloadSalary;
     //CString reason;
     //CString notes;
+    int result;
     int isView;
 };
 
@@ -334,7 +335,7 @@ struct DATA_STOCK
 #define UPDATE_PERSONS_INFO         "UPDATE %s SET %s = '%s', pwd = '%s', user_name = '%s', tel = '%s', authority = %d WHERE %s = '%s'"
 #define UPDATE_TPERSONS_INFO         "UPDATE %s SET %s = '%s', pwd = '%s', teacher_name = '%s', tel = '%s', authority = %d WHERE %s = '%s'"
 #define UPDATE_ROOM_REQUEST         "UPDATE t_report SET is_view = %d WHERE submit_person = '%s' && upload_date = '%s'"
-#define UPDATE_SALARY_DATE          "UPDATE t_workload_salary SET workload_salary = %s, is_view = %d WHERE user_name = '%s' && request_date = '%s'"
+#define UPDATE_SALARY_DATE          "UPDATE t_workload_salary SET result = %d, is_view = %d WHERE user_name = '%s' && request_date = '%s'"
 #define UPDATE_ATTENDENCE_DATE      "UPDATE t_student_course SET attendance_num = %d, score = %d WHERE student_id = '%s'"
 
 
