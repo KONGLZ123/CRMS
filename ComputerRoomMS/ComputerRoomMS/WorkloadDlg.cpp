@@ -44,6 +44,11 @@ void CWorkloadDlg::SetThreadDatabase(CWinThreadDatabase * pDbThread)
     m_pDbThread = pDbThread;
 }
 
+void CWorkloadDlg::SetRequestResult(CString str)
+{
+    GetDlgItem(IDC_EDIT_RESULT)->SetWindowText(str);
+}
+
 
 // 请求津贴
 void CWorkloadDlg::OnBnClickedBtnDeclaration()
@@ -83,6 +88,8 @@ void CWorkloadDlg::OnBnClickedBtnDeclaration()
     pReportData->strWorkloadSalary = strWorkloadSalary;
 
     PostThreadMessage(m_pDbThread->m_nThreadID, WM_INSERT_WORKLOAD_REPORT, (WPARAM)pReportData, 0);
+
+    ::MessageBox(NULL, _T("提交成功"), _T("提示"), MB_OK);
 }
 
 

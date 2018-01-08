@@ -59,6 +59,7 @@ private:
     BOOL SelectRoomRepairInfoFromDb(vector<ROOM_REPAIR_INFO> &vecRepairInfo, Json::Value & root);
     BOOL SelectTeacherInfoFromDb(vector<TEACHER_INFO> &vecTeacherInfo, Json::Value & root);
     BOOL SelectStudentInfoFromDb(vector<STUDETN_INFO> &vecStudentInfo, Json::Value & root);
+    BOOL SelectAttendenceInfoFromDb(vector<ATTENDENCE_INFO> &vecAttendenceInfo, Json::Value & root);
     BOOL SelectScheduleFromDb(vector<CLASS_DATA> &vecSheduleInfo, Json::Value & root);
     BOOL SelectReportDataFromDb(vector<REPORT_DATA> &vecReportData, Json::Value & root);
     BOOL SelectAnnounceFromDb(vector<ANNOUNCE_DATA> &vecAnnounceData, Json::Value & root);

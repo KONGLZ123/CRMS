@@ -150,14 +150,13 @@ void CWinThreadDatabase::OnDeleteAnnounce(WPARAM wParam, LPARAM lParam)
 {
     int index = (int)wParam;
 
-    char *pSql = SELECT_REPORT_DATA;
-    char szTemp[200];
-    sprintf(szTemp, DELETE_OLD_ANNOUNCE, index);
-    int res = mysql_real_query(&m_mysql, szTemp, (unsigned long)strlen(szTemp));//≤Â»Î ˝æ›
-    if (0 != res)
-    {
-        ::MessageBox(NULL, _T("OnDeleteAnnounce faied£°"), _T("¥ÌŒÛ"), MB_OK);
-    }
+    Json::Value root;
+
+    USES_CONVERSION;
+    root["code"] = S_CODE_DELETE_OLD_ANNOUNCE;
+    root["index"] = index;
+
+    SendMsgToServer(root);
 }
 
 void CWinThreadDatabase::OnAdminSetupPwd(WPARAM wParam, LPARAM lParam)
@@ -408,16 +407,18 @@ void CWinThreadDatabase::OnUpdateRoomRequest(WPARAM wParam, LPARAM lParam)
 
 void CWinThreadDatabase::OnUpdateExamInfo(WPARAM wParam, LPARAM lParam)
 {
-    STUDETN_INFO *pStuInfo = reinterpret_cast<STUDETN_INFO *>(wParam);
+    ATTENDENCE_INFO *pStuInfo = reinterpret_cast<ATTENDENCE_INFO *>(wParam);
 
-    //Json::Value root;
+    Json::Value root;
 
-    //USES_CONVERSION;
-    //root["code"] = S_CODE_UPDATE_EXAM_INFO;
-    //root["attendece_cnt"] = pStuInfo->attendece_cnt;
-    //root["attendece_score"] = pStuInfo->attendece_score;
+    USES_CONVERSION;
+    char *pStuId = W2A(pStuInfo->student_id);
+    root["code"] = S_CODE_UPDATE_EXAM_INFO;
+    root["student_id"] = pStuId;
+    root["attendece_cnt"] = pStuInfo->attendece_cnt;
+    root["attendece_score"] = pStuInfo->attendece_score;
 
-    //SendMsgToServer(root);
+    SendMsgToServer(root);
 
     delete pStuInfo;
     pStuInfo = NULL;
@@ -612,11 +613,13 @@ BOOL CWinThreadDatabase::SelectTeacherInfoFromDb(vector<TEACHER_INFO> &vecTeache
         TEACHER_INFO teacherInfo;
 
         //teacherInfo.id = root["teacherInfo"][i]["id"].asInt();
-        teacherInfo.account = CString(root["teacherInfo"][i]["account"].asString().c_str());
-        teacherInfo.pwd = CString(root["teacherInfo"][i]["pwd"].asString().c_str());
-        teacherInfo.name = CString(root["teacherInfo"][i]["name"].asString().c_str());
-        teacherInfo.tel = CString(root["teacherInfo"][i]["tel"].asString().c_str());
+        teacherInfo.account = root["teacherInfo"][i]["account"].asCString();
+        teacherInfo.pwd = root["teacherInfo"][i]["pwd"].asCString();
+        teacherInfo.name = root["teacherInfo"][i]["name"].asCString();
+        teacherInfo.tel = root["teacherInfo"][i]["tel"].asCString();
         teacherInfo.authority = root["teacherInfo"][i]["authority"].asInt();
+        //teacherInfo.classes = root["teacherInfo"][i]["classes_id"].asCString();
+        teacherInfo.course = root["teacherInfo"][i]["course_id"].asCString();
 
         vecTeacherInfo.push_back(teacherInfo);
     }
@@ -651,6 +654,27 @@ BOOL CWinThreadDatabase::SelectStudentInfoFromDb(vector<STUDETN_INFO> &vecStuden
     return TRUE;
 }
 
+BOOL CWinThreadDatabase::SelectAttendenceInfoFromDb(vector<ATTENDENCE_INFO>& vecAttendenceInfo, Json::Value & root)
+{
+    vecAttendenceInfo.clear();
+
+    for (unsigned int i = 0; i < root["attendenceInfo"].size(); i++)
+    {
+        ATTENDENCE_INFO attendenceInfo;
+
+        attendenceInfo.student_id = root["attendenceInfo"][i]["student_id"].asCString();
+        attendenceInfo.course_name = root["attendenceInfo"][i]["course_name"].asCString();
+        attendenceInfo.teacher_name = root["attendenceInfo"][i]["teacher_name"].asCString();
+        attendenceInfo.student_name = root["attendenceInfo"][i]["student_name"].asCString();
+        attendenceInfo.attendece_cnt = root["attendenceInfo"][i]["attendece_cnt"].asInt();
+        attendenceInfo.attendece_score = root["attendenceInfo"][i]["attendece_score"].asInt();
+
+        vecAttendenceInfo.push_back(attendenceInfo);
+    }
+
+    return TRUE;
+}
+
 BOOL CWinThreadDatabase::SelectScheduleFromDb(vector<CLASS_DATA>& vecSheduleInfo, Json::Value & root)
 {
     vecSheduleInfo.clear();
@@ -668,28 +692,6 @@ BOOL CWinThreadDatabase::SelectScheduleFromDb(vector<CLASS_DATA>& vecSheduleInfo
         classData.class_34 = root["classData"][i]["class_34"].asCString();
         classData.class_56 = root["classData"][i]["class_56"].asCString();
         classData.class_78 = root["classData"][i]["class_78"].asCString();
-
-        //SCHEDULE_DATA scheduleData;
-        //scheduleData.strMon12 = CString(root["scheduleInfo"][i]["strMon12"].asString().c_str());
-        //scheduleData.strMon34 = CString(root["scheduleInfo"][i]["strMon34"].asString().c_str());
-        //scheduleData.strMon56 = CString(root["scheduleInfo"][i]["strMon56"].asString().c_str());
-        //scheduleData.strMon78 = CString(root["scheduleInfo"][i]["strMon78"].asString().c_str());
-        //scheduleData.strTues12 = CString(root["scheduleInfo"][i]["strTues12"].asString().c_str());
-        //scheduleData.strTues34 = CString(root["scheduleInfo"][i]["strTues34"].asString().c_str());
-        //scheduleData.strTues56 = CString(root["scheduleInfo"][i]["strTues56"].asString().c_str());
-        //scheduleData.strTues78 = CString(root["scheduleInfo"][i]["strTues78"].asString().c_str());
-        //scheduleData.strWed12 = CString(root["scheduleInfo"][i]["strWed12"].asString().c_str());
-        //scheduleData.strWed34 = CString(root["scheduleInfo"][i]["strWed34"].asString().c_str());
-        //scheduleData.strWed56 = CString(root["scheduleInfo"][i]["strWed56"].asString().c_str());
-        //scheduleData.strWed78 = CString(root["scheduleInfo"][i]["strWed78"].asString().c_str());
-        //scheduleData.strThu12 = CString(root["scheduleInfo"][i]["strThu12"].asString().c_str());
-        //scheduleData.strThu34 = CString(root["scheduleInfo"][i]["strThu34"].asString().c_str());
-        //scheduleData.strThu56 = CString(root["scheduleInfo"][i]["strThu56"].asString().c_str());
-        //scheduleData.strThu78 = CString(root["scheduleInfo"][i]["strThu78"].asString().c_str());
-        //scheduleData.strFri12 = CString(root["scheduleInfo"][i]["strFri12"].asString().c_str());
-        //scheduleData.strFri34 = CString(root["scheduleInfo"][i]["strFri34"].asString().c_str());
-        //scheduleData.strFri56 = CString(root["scheduleInfo"][i]["strFri56"].asString().c_str());
-        //scheduleData.strFri78 = CString(root["scheduleInfo"][i]["strFri78"].asString().c_str());
 
         vecSheduleInfo.push_back(classData);
     }
@@ -785,11 +787,13 @@ BOOL CWinThreadDatabase::SelectWorkloadSalaryInfoFromDb(vector<WORKLOAD_REPORT>&
     {
         WORKLOAD_REPORT salaryInfo;
 
-        salaryInfo.strDate = CString(root["salaryInfo"][i]["date"].asString().c_str());
-        salaryInfo.strFixSalary = CString(root["salaryInfo"][i]["fix_salary"].asString().c_str());
-        salaryInfo.strName = CString(root["salaryInfo"][i]["name"].asString().c_str());
-        salaryInfo.strReason = CString(root["salaryInfo"][i]["reason"].asString().c_str());
-        salaryInfo.strWorkloadSalary = CString(root["salaryInfo"][i]["workload_salary"].asString().c_str());
+        salaryInfo.strDate = root["salaryInfo"][i]["date"].asCString();
+        salaryInfo.strFixSalary = root["salaryInfo"][i]["fix_salary"].asCString();
+        salaryInfo.strName = root["salaryInfo"][i]["name"].asCString();
+        salaryInfo.strReason = root["salaryInfo"][i]["reason"].asCString();
+        salaryInfo.strWorkloadSalary = root["salaryInfo"][i]["workload_salary"].asCString();
+        salaryInfo.result = root["salaryInfo"][i]["workload_salary"].asInt();
+        salaryInfo.isView = root["salaryInfo"][i]["workload_salary"].asInt();
 
         vecSalaryInfo.push_back(salaryInfo);
     }
@@ -871,8 +875,8 @@ void CWinThreadDatabase::PraseJson(char * buf)
         {
         case S_CODE_LOGIN_SUCCESS:  // µ«¬º
         {
-            CString *pStr = new CString(_T("test"));
-            PostMessage(m_curHwnd, WM_LOGIN_SUCCESS, (WPARAM)pStr, 0);
+            //CString *pStr = new CString(_T("test"));
+            PostMessage(m_curHwnd, WM_LOGIN_SUCCESS, 0, 0);
 
             //CString *pStr = new CString(_T("test"));
             //PostMessage(m_curHwnd, WM_LOGIN_SUCCESS, (WPARAM)pStr, 0);
@@ -896,6 +900,7 @@ void CWinThreadDatabase::PraseJson(char * buf)
             SelectRoomRepairInfoFromDb(pDataStock->vecRoomRepairInfo, root);
             SelectTeacherInfoFromDb(pDataStock->vecTeacherInfo, root);
             SelectStudentInfoFromDb(pDataStock->vecStudentInfo, root);
+            SelectAttendenceInfoFromDb(pDataStock->vecAttendenceInfo, root);
             SelectReportDataFromDb(pDataStock->vecReportData, root);
             SelectAnnounceFromDb(pDataStock->vecAnnounceData, root);
             SelectScheduleFromDb(pDataStock->vecScheduleData, root);
@@ -913,6 +918,10 @@ void CWinThreadDatabase::PraseJson(char * buf)
 
         }
         break;
+        case S_CODE_PERSON_EXIT_ERROR: {
+            PostMessage(m_curHwnd, WM_PERSON_EXIST_ERROR, 0, 0);
+            break;
+        }
         default:
             break;
         }

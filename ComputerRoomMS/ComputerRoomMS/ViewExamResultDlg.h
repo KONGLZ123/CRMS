@@ -22,4 +22,5 @@ public:
     CListCtrlOwner m_listInfo;
     virtual BOOL OnInitDialog();
     virtual BOOL PreTranslateMessage(MSG* pMsg);
+    void SetAttendenceInfo(vector<ATTENDENCE_INFO>& vecStudentInfo);
 };

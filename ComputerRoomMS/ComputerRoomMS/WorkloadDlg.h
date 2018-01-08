@@ -23,6 +23,7 @@ protected:
 public:
     void SetCurUserName(CString strUserName);
     void SetThreadDatabase(CWinThreadDatabase *pDbThread);
+    void SetRequestResult(CString str);
 
 private:
     CWinThreadDatabase *    m_pDbThread;

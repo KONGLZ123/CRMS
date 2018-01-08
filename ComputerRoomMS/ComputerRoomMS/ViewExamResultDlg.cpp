@@ -76,3 +76,21 @@ BOOL CViewExamResultDlg::PreTranslateMessage(MSG* pMsg)
 
     return CDialogEx::PreTranslateMessage(pMsg);
 }
+
+void CViewExamResultDlg::SetAttendenceInfo(vector<ATTENDENCE_INFO>& vecStudentInfo)
+{
+    if (0 == vecStudentInfo.size())
+        return;
+
+    CString strTmp;
+    for (unsigned int i = 0; i < vecStudentInfo.size(); i++)
+    {
+        strTmp.Format(_T("%d"), i + 1);
+        m_listInfo.InsertItem(i, strTmp);
+        m_listInfo.SetItemText(i, 1, vecStudentInfo.at(i).course_name);
+        strTmp.Format(_T("%d"), vecStudentInfo.at(i).attendece_cnt);
+        m_listInfo.SetItemText(i, 2, strTmp);
+        strTmp.Format(_T("%d"), vecStudentInfo.at(i).attendece_score);
+        m_listInfo.SetItemText(i, 3, strTmp);
+    }
+}
