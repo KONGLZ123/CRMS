@@ -50,7 +50,8 @@ protected:
     LRESULT OnLoginError(WPARAM wParam, LPARAM lParam);
     LRESULT OnInitDataSuccess(WPARAM wParam, LPARAM lParam);
     LRESULT OnInitDataFailed(WPARAM wParam, LPARAM lParam);
-
+    LRESULT OnUpdateEdit(WPARAM wParam, LPARAM lParam);
+    LRESULT OnPersonExistError(WPARAM wParam, LPARAM lParam);
 
 private:
     void InitCtrls();

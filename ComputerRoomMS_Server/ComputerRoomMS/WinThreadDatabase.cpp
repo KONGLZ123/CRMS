@@ -3,9 +3,11 @@
 
 #include "stdafx.h"
 #include "ComputerRoomMS.h"
+#include <memory>
 #include "WinThreadDatabase.h"
 #include "json.h"
 #include "data.h"
+
 
 // CWinThreadDatabase
 
@@ -242,7 +244,7 @@ void CWinThreadDatabase::OnDeleteAnnounce(WPARAM wParam, LPARAM lParam)
     int res = mysql_real_query(&m_mysql, szTemp, (unsigned long)strlen(szTemp));//插入数据
     if (0 != res)
     {
-        ::MessageBox(NULL, _T("OnDeleteAnnounce faied！"), _T("错误"), MB_OK);
+        SendMsgToDlg(_T("OnDeleteAnnounce faied！"));
     }
 }
 
@@ -280,6 +282,7 @@ void CWinThreadDatabase::OnAddPerson(WPARAM wParam, LPARAM lParam)
     char *pMajor = W2A(ptagAddPerson->major);
     char *pGrade = W2A(ptagAddPerson->grade);
     char *pCourse = W2A(ptagAddPerson->course);
+    char *pScId = W2A(ptagAddPerson->account + ptagAddPerson->course);
     int auth = ptagAddPerson->authority;
 
     char szTemp[1024];
@@ -309,43 +312,45 @@ void CWinThreadDatabase::OnAddPerson(WPARAM wParam, LPARAM lParam)
             sprintf(szTemp, "INSERT t_teacher_info(teacher_id, pwd, teacher_name, tel, authority) VALUES('%s', '%s', '%s', '%s', %d);",
                 pAccount, pPwd, pName, pTel, auth);
             int res = mysql_real_query(&m_mysql, szTemp, (unsigned long)strlen(szTemp));//插入数据
-            if (0 != res)
-                ::MessageBox(NULL, _T("InsertNewAccountToDb faied！"), _T("错误"), MB_OK);
-
-            sprintf(szTemp, "INSERT t_classes(classes_id, teacher_id) VALUES('%s', '%s'); ", pGrade, pAccount);
-            res = mysql_real_query(&m_mysql, szTemp, (unsigned long)strlen(szTemp));//插入数据
-            if (0 != res)
-                ::MessageBox(NULL, _T("InsertNewAccountToDb faied！"), _T("错误"), MB_OK);
-
+            if (0 != res) {
+                PersonIsAlreadyExist();
+                SendMsgToDlg(_T("InsertNewAccountToDb faied！"));
+                return;
+            }
+                
             sprintf(szTemp, "INSERT t_course(course_id, teacher_id) VALUES('%s', '%s'); ", pCourse, pAccount);
             res = mysql_real_query(&m_mysql, szTemp, (unsigned long)strlen(szTemp));//插入数据
             if (0 != res)
-                ::MessageBox(NULL, _T("InsertNewAccountToDb faied！"), _T("错误"), MB_OK);
+                SendMsgToDlg(_T("InsertNewAccountToDb faied！"));
 
             delete ptagAddPerson;
             ptagAddPerson = NULL;
             return;
         }
         case STUDENT: {
-            char *pTmp = "SET FOREIGN_KEY_CHECKS = 0";
-            int res = mysql_real_query(&m_mysql, pTmp, (unsigned long)strlen(pTmp));//插入数据
-            if (0 != res)
-                ::MessageBox(NULL, _T("InsertNewAccountToDb faied！"), _T("错误"), MB_OK);
+            //char *pTmp = "SET FOREIGN_KEY_CHECKS = 0";
+            //int res = mysql_real_query(&m_mysql, pTmp, (unsigned long)strlen(pTmp));//插入数据
+            //if (0 != res)
+            //    ::MessageBox(NULL, _T("InsertNewAccountToDb faied！"), _T("错误"), MB_OK);
+
+            sprintf(szTemp, "INSERT t_classes(classes_id) VALUES('%s'); ", pGrade);
+            int res = mysql_real_query(&m_mysql, szTemp, (unsigned long)strlen(szTemp));//插入数据
+            //if (0 != res)
+            //    ::MessageBox(NULL, _T("InsertNewAccountToDb faied！"), _T("错误"), MB_OK);
 
             sprintf(szTemp, "INSERT t_student_info(student_id, pwd, user_name, tel, major, class_id, authority) VALUES('%s', '%s', '%s', '%s', '%s', '%s', %d);",
                 pAccount, pPwd, pName, pTel, pMajor, pGrade, auth);
             res = mysql_real_query(&m_mysql, szTemp, (unsigned long)strlen(szTemp));//插入数据
-            if (0 != res)
-                ::MessageBox(NULL, _T("InsertNewAccountToDb faied！"), _T("错误"), MB_OK);
+            if (0 != res) {
+                PersonIsAlreadyExist();
+                SendMsgToDlg(_T("InsertNewAccountToDb faied！"));
+                return;
+            }
 
-            res = mysql_real_query(&m_mysql, pTmp, (unsigned long)strlen(pTmp));//插入数据
-            if (0 != res)
-                ::MessageBox(NULL, _T("InsertNewAccountToDb faied！"), _T("错误"), MB_OK);
-
-            sprintf(szTemp, "INSERT t_student_course(student_id, course_id, attendance_num, score) VALUES('%s', '%s', 0, 0);", pAccount, pCourse);
+            sprintf(szTemp, "INSERT t_student_course(sc_id, student_id, course_id, attendance_num, score) VALUES('%s', '%s', '%s', 0, 0);", pScId,  pAccount, pCourse);
             res = mysql_real_query(&m_mysql, szTemp, (unsigned long)strlen(szTemp));//插入数据
             if (0 != res)
-                ::MessageBox(NULL, _T("InsertNewAccountToDb faied！"), _T("错误"), MB_OK);
+                SendMsgToDlg(_T("InsertNewAccountToDb faied！"));
 
             delete ptagAddPerson;
             ptagAddPerson = NULL;
@@ -360,7 +365,7 @@ void CWinThreadDatabase::OnAddPerson(WPARAM wParam, LPARAM lParam)
     int res = mysql_real_query(&m_mysql, szTemp, (unsigned long)strlen(szTemp));//插入数据
     if (0 != res)
     {
-        ::MessageBox(NULL, _T("InsertNewAccountToDb faied！"), _T("错误"), MB_OK);
+        SendMsgToDlg(_T("InsertNewAccountToDb faied！"));
     }
 
     delete ptagAddPerson;
@@ -386,7 +391,7 @@ void CWinThreadDatabase::OnRequestRepair(WPARAM wParam, LPARAM lParam)
     int res = mysql_real_query(&m_mysql, szTemp, (unsigned long)strlen(szTemp));//插入数据
     if (0 != res)
     {
-        ::MessageBox(NULL, _T("SelectReportDataFromDb faied！"), _T("错误"), MB_OK);
+        SendMsgToDlg(_T("SelectReportDataFromDb faied！"));
         //return FALSE;
     }
 
@@ -410,16 +415,31 @@ void CWinThreadDatabase::OnDelPersonInof(WPARAM wParam, LPARAM lParam)
     case REPAIR:
         sprintf(szTemp, DELETE_PERSON_INFO, "t_repair_info", "repair_id", pAccount);
         break;
-    case TEACHER:
+    case TEACHER: {
+        int res;
+        //sprintf(szTemp, DELETE_PERSON_INFO, "t_teacher_info", "teacher_id", pAccount);
+        //res = mysql_real_query(&m_mysql, szTemp, (unsigned long)strlen(szTemp));
+        //if (0 != res)
+        //    ::MessageBox(NULL, _T("OnDelPersonInof faied！"), _T("错误"), MB_OK);
+
+        sprintf(szTemp, "DELETE FROM t_course WHERE teacher_id = '%s'", pAccount);
+        res = mysql_real_query(&m_mysql, szTemp, (unsigned long)strlen(szTemp));
+        if (0 != res)
+            SendMsgToDlg(_T("OnDelPersonInof faied！"));
+
         sprintf(szTemp, DELETE_PERSON_INFO, "t_teacher_info", "teacher_id", pAccount);
-        break;
+        res = mysql_real_query(&m_mysql, szTemp, (unsigned long)strlen(szTemp));
+        if (0 != res)
+            SendMsgToDlg(_T("OnDelPersonInof faied！"));
+        return;
+    }
     default:
         break;
     }
 
     int res = mysql_real_query(&m_mysql, szTemp, (unsigned long)strlen(szTemp));
     if (0 != res)
-        ::MessageBox(NULL, _T("OnDelPersonInof faied！"), _T("错误"), MB_OK);
+        SendMsgToDlg(_T("OnDelPersonInof faied！"));
 
     delete pPersonInfo;
     pPersonInfo = NULL;
@@ -445,7 +465,7 @@ void CWinThreadDatabase::OnUpdatePersonInof(WPARAM wParam, LPARAM lParam)
         sprintf(szTemp, UPDATE_PERSONS_INFO, "t_repair_info", "repair_id", pAccount, pPwd, pName, pTel, pPersonInfo->authority, "repair_id", pAccount);
         break;
     case TEACHER:
-        sprintf(szTemp, UPDATE_PERSONS_INFO, "t_teacher_info", "teacher_id", pAccount, pPwd, pName, pTel, pPersonInfo->authority, "teacher_id", pAccount);
+        sprintf(szTemp, UPDATE_TPERSONS_INFO, "t_teacher_info", "teacher_id", pAccount, pPwd, pName, pTel, pPersonInfo->authority, "teacher_id", pAccount);
         break;
     default:
         break;
@@ -453,7 +473,7 @@ void CWinThreadDatabase::OnUpdatePersonInof(WPARAM wParam, LPARAM lParam)
 
     int res = mysql_real_query(&m_mysql, szTemp, (unsigned long)strlen(szTemp));
     if (0 != res)
-        ::MessageBox(NULL, _T("OnUpdatePersonInof faied！"), _T("错误"), MB_OK);
+        SendMsgToDlg(_T("OnUpdatePersonInof faied！"));
 
     delete pPersonInfo;
     pPersonInfo = NULL;
@@ -471,7 +491,7 @@ void CWinThreadDatabase::OnDelRegister(WPARAM wParam, LPARAM lParam)
 
     int res = mysql_real_query(&m_mysql, szTemp, (unsigned long)strlen(szTemp));
     if (0 != res)
-        ::MessageBox(NULL, _T("OnDelPersonInof faied！"), _T("错误"), MB_OK);
+        SendMsgToDlg(_T("OnDelPersonInof faied！"));
 
     delete pStr;
     pStr = NULL;
@@ -493,7 +513,7 @@ void CWinThreadDatabase::OnDeclareExamInfo(WPARAM wParam, LPARAM lParam)
     int res = mysql_real_query(&m_mysql, szTemp, (unsigned long)strlen(szTemp));//插入数据
     if (0 != res)
     {
-        ::MessageBox(NULL, _T("OnDeclareExamInfo faied！"), _T("错误"), MB_OK);
+        SendMsgToDlg(_T("OnDeclareExamInfo faied！"));
     }
 
     delete pExamInfo;
@@ -535,7 +555,7 @@ void CWinThreadDatabase::OnSetClassData(WPARAM wParam, LPARAM lParam)
     int res = mysql_real_query(&m_mysql, szTemp, (unsigned long)strlen(szTemp));//插入数据
     if (0 != res)
     {
-        ::MessageBox(NULL, _T("OnDeclareExamInfo faied！"), _T("错误"), MB_OK);
+        SendMsgToDlg(_T("OnDeclareExamInfo faied！"));
     }
 
     delete pClassData;
@@ -559,7 +579,7 @@ void CWinThreadDatabase::OnInsertWorkload(WPARAM wParam, LPARAM lParam)
     int res = mysql_real_query(&m_mysql, szTemp, (unsigned long)strlen(szTemp));//插入数据
     if (0 != res)
     {
-        ::MessageBox(NULL, _T("OnInsertWorkload faied！"), _T("错误"), MB_OK);
+        SendMsgToDlg(_T("OnInsertWorkload faied！"));
         //return FALSE;
     }
 
@@ -586,7 +606,7 @@ void CWinThreadDatabase::OnInsertAssertData(WPARAM wParam, LPARAM lParam)
     int res = mysql_real_query(&m_mysql, szTemp, (unsigned long)strlen(szTemp));//插入数据
     if (0 != res)
     {
-        ::MessageBox(NULL, _T("OnInsertAssertData faied！"), _T("错误"), MB_OK);
+        SendMsgToDlg(_T("OnInsertAssertData faied！"));
         //return FALSE;
     }
 
@@ -607,7 +627,7 @@ void CWinThreadDatabase::OnUpdateRoomRequest(WPARAM wParam, LPARAM lParam)
     int res = mysql_real_query(&m_mysql, szTemp, (unsigned long)strlen(szTemp));//插入数据
     if (0 != res)
     {
-        ::MessageBox(NULL, _T("OnUpdateRoomRequest faied！"), _T("错误"), MB_OK);
+        SendMsgToDlg(_T("OnUpdateRoomRequest faied！"));
         //return FALSE;
     }
 
@@ -629,7 +649,7 @@ void CWinThreadDatabase::OnUpdateSalaryInfo(WPARAM wParam, LPARAM lParam)
     int res = mysql_real_query(&m_mysql, szTemp, (unsigned long)strlen(szTemp));//插入数据
     if (0 != res)
     {
-        ::MessageBox(NULL, _T("OnUpdateSalaryInfo faied！"), _T("错误"), MB_OK);
+        SendMsgToDlg(_T("OnUpdateSalaryInfo faied！"));
         //return FALSE;
     };
 
@@ -649,7 +669,7 @@ void CWinThreadDatabase::OnUpdateExamInfo(WPARAM wParam, LPARAM lParam)
     int res = mysql_real_query(&m_mysql, szTemp, (unsigned long)strlen(szTemp));//插入数据
     if (0 != res)
     {
-        ::MessageBox(NULL, _T("OnUpdateSalaryInfo faied！"), _T("错误"), MB_OK);
+        SendMsgToDlg(_T("OnUpdateSalaryInfo faied！"));
         //return FALSE;
     };
 
@@ -725,7 +745,7 @@ BOOL CWinThreadDatabase::GetLoginData(LOGIN_REQUEST *ptagLoginRequest)
     }
     else
     {
-        MessageBox(NULL, _T("query sql failed!"), _T("错误提示"), MB_OK);
+        SendMsgToDlg(_T("query sql failed!"));
     }
 
     return 0;
@@ -764,7 +784,7 @@ BOOL CWinThreadDatabase::SelectAdminInfoFromDb(vector<SYSADMIN_INFO> &vecAdminIn
     int res = mysql_real_query(&m_mysql, pSql, (unsigned long)strlen(pSql));//插入数据
     if (0 != res)
     {
-        ::MessageBox(NULL, _T("SelectAdminInfoFromDb faied！"), _T("错误"), MB_OK);
+        SendMsgToDlg(_T("SelectAdminInfoFromDb faied！"));
         return FALSE;
     }
 
@@ -806,7 +826,7 @@ BOOL CWinThreadDatabase::SelectAdminInfoFromDb(vector<SYSADMIN_INFO> &vecAdminIn
     }
     else
     {
-        ::MessageBox(NULL, _T("mysql_store_result faied！"), _T("错误"), MB_OK);
+        SendMsgToDlg(_T("mysql_store_result faied！"));
         return FALSE;
     }
 
@@ -825,7 +845,7 @@ BOOL CWinThreadDatabase::SelectRoomManagerInfoFromDb(vector<ROOM_MANAGER_INFO> &
     int res = mysql_real_query(&m_mysql, pSql, (unsigned long)strlen(pSql));//插入数据
     if (0 != res)
     {
-        ::MessageBox(NULL, _T("SelectRoomManagerInfoFromDb faied！"), _T("错误"), MB_OK);
+        SendMsgToDlg(_T("SelectRoomManagerInfoFromDb faied！"));
         return FALSE;
     }
 
@@ -878,7 +898,7 @@ BOOL CWinThreadDatabase::SelectRoomManagerInfoFromDb(vector<ROOM_MANAGER_INFO> &
     }
     else
     {
-        ::MessageBox(NULL, _T("mysql_store_result faied！"), _T("错误"), MB_OK);
+        SendMsgToDlg(_T("mysql_store_result faied！"));
         return FALSE;
     }
 
@@ -897,7 +917,7 @@ BOOL CWinThreadDatabase::SelectRoomRepairInfoFromDb(vector<ROOM_REPAIR_INFO> &ve
     int res = mysql_real_query(&m_mysql, pSql, (unsigned long)strlen(pSql));//插入数据
     if (0 != res)
     {
-        ::MessageBox(NULL, _T("SelectRoomRepairInfoFromDb faied！"), _T("错误"), MB_OK);
+        SendMsgToDlg(_T("SelectRoomRepairInfoFromDb faied！"));
         return FALSE;
     }
 
@@ -950,7 +970,7 @@ BOOL CWinThreadDatabase::SelectRoomRepairInfoFromDb(vector<ROOM_REPAIR_INFO> &ve
     }
     else
     {
-        ::MessageBox(NULL, _T("mysql_store_result faied！"), _T("错误"), MB_OK);
+        SendMsgToDlg(_T("mysql_store_result faied！"));
         return FALSE;
     }
 
@@ -969,7 +989,7 @@ BOOL CWinThreadDatabase::SelectTeacherInfoFromDb(vector<TEACHER_INFO> &vecTeache
     int res = mysql_real_query(&m_mysql, pSql, (unsigned long)strlen(pSql));//插入数据
     if (0 != res)
     {
-        ::MessageBox(NULL, _T("SelectTeacherInfoFromDb faied！"), _T("错误"), MB_OK);
+        SendMsgToDlg(_T("SelectTeacherInfoFromDb faied！"));
         return FALSE;
     }
 
@@ -1001,10 +1021,10 @@ BOOL CWinThreadDatabase::SelectTeacherInfoFromDb(vector<TEACHER_INFO> &vecTeache
                 case 4:
                     root["authority"] = atoi(sqlRow[i]);
                     break;
+                //case 5:
+                //    root["classes_id"] = NotNull(sqlRow[i]);
+                //    break;
                 case 5:
-                    root["classes_id"] = NotNull(sqlRow[i]);
-                    break;
-                case 6:
                     root["course_id"] = NotNull(sqlRow[i]);
                     break;
                 default:
@@ -1018,7 +1038,7 @@ BOOL CWinThreadDatabase::SelectTeacherInfoFromDb(vector<TEACHER_INFO> &vecTeache
     }
     else
     {
-        ::MessageBox(NULL, _T("mysql_store_result faied！"), _T("错误"), MB_OK);
+        SendMsgToDlg(_T("mysql_store_result faied！"));
         return FALSE;
     }
 
@@ -1037,7 +1057,7 @@ BOOL CWinThreadDatabase::SelectStudentInfoFromDb(vector<STUDETN_INFO> &vecStuden
     int res = mysql_real_query(&m_mysql, pSql, (unsigned long)strlen(pSql));//插入数据
     if (0 != res)
     {
-        ::MessageBox(NULL, _T("SelectStudentInfoFromDb faied！"), _T("错误"), MB_OK);
+        SendMsgToDlg(_T("SelectStudentInfoFromDb faied！"));
         return FALSE;
     }
 
@@ -1090,7 +1110,7 @@ BOOL CWinThreadDatabase::SelectStudentInfoFromDb(vector<STUDETN_INFO> &vecStuden
     }
     else
     {
-        ::MessageBox(NULL, _T("mysql_store_result faied！"), _T("错误"), MB_OK);
+        SendMsgToDlg(_T("mysql_store_result faied！"));
         return FALSE;
     }
 
@@ -1109,7 +1129,7 @@ BOOL CWinThreadDatabase::SelectAttendenceInfoFromDb(vector<ATTENDENCE_INFO>& vec
     int res = mysql_real_query(&m_mysql, pSql, (unsigned long)strlen(pSql));//插入数据
     if (0 != res)
     {
-        ::MessageBox(NULL, _T("SelectAttendenceInfoFromDb faied！"), _T("错误"), MB_OK);
+        SendMsgToDlg(_T("SelectAttendenceInfoFromDb faied！"));
         return FALSE;
     }
 
@@ -1156,7 +1176,7 @@ BOOL CWinThreadDatabase::SelectAttendenceInfoFromDb(vector<ATTENDENCE_INFO>& vec
     }
     else
     {
-        ::MessageBox(NULL, _T("mysql_store_result faied！"), _T("错误"), MB_OK);
+        SendMsgToDlg(_T("mysql_store_result faied！"));
         return FALSE;
     }
 
@@ -1175,7 +1195,7 @@ BOOL CWinThreadDatabase::SelectScheduleFromDb(vector<SCHEDULE_DATA>& vecSheduleI
     int res = mysql_real_query(&m_mysql, pSql, (unsigned long)strlen(pSql));//插入数据
     if (0 != res)
     {
-        ::MessageBox(NULL, _T("SelectScheduleFromDb faied！"), _T("错误"), MB_OK);
+        SendMsgToDlg(_T("SelectScheduleFromDb faied！"));
         return FALSE;
     }
 
@@ -1313,7 +1333,7 @@ BOOL CWinThreadDatabase::SelectScheduleFromDb(vector<SCHEDULE_DATA>& vecSheduleI
     }
     else
     {
-        ::MessageBox(NULL, _T("mysql_store_result faied！"), _T("错误"), MB_OK);
+        SendMsgToDlg(_T("mysql_store_result faied！"));
         return FALSE;
     }
 
@@ -1332,7 +1352,7 @@ BOOL CWinThreadDatabase::SelectReportDataFromDb(vector<REPORT_DATA>& vecReportDa
     int res = mysql_real_query(&m_mysql, pSql, (unsigned long)strlen(pSql));//插入数据
     if (0 != res)
     {
-        ::MessageBox(NULL, _T("SelectReportDataFromDb faied！"), _T("错误"), MB_OK);
+        SendMsgToDlg(_T("SelectReportDataFromDb faied！"));
         return FALSE;
     }
 
@@ -1393,7 +1413,7 @@ BOOL CWinThreadDatabase::SelectReportDataFromDb(vector<REPORT_DATA>& vecReportDa
     }
     else
     {
-        ::MessageBox(NULL, _T("mysql_store_result faied！"), _T("错误"), MB_OK);
+        SendMsgToDlg(_T("mysql_store_result faied！"));
         return FALSE;
     }
 
@@ -1411,7 +1431,7 @@ BOOL CWinThreadDatabase::InsertNewAnnounceToDb(CString strText, int type)
     int res = mysql_real_query(&m_mysql, szTemp, (unsigned long)strlen(szTemp));//插入数据
     if (0 != res)
     {
-        ::MessageBox(NULL, _T("SelectReportDataFromDb faied！"), _T("错误"), MB_OK);
+        SendMsgToDlg(_T("SelectReportDataFromDb faied！"));
         return FALSE;
     }
 
@@ -1431,7 +1451,7 @@ BOOL CWinThreadDatabase::SelectAnnounceFromDb(vector<ANNOUNCE_DATA> &vecAnnounce
     int res = mysql_real_query(&m_mysql, pSql, (unsigned long)strlen(pSql));//插入数据
     if (0 != res)
     {
-        ::MessageBox(NULL, _T("SelectAnnounceFromDb faied！"), _T("错误"), MB_OK);
+        SendMsgToDlg(_T("SelectAnnounceFromDb faied！"));
         return FALSE;
     }
 
@@ -1450,7 +1470,7 @@ BOOL CWinThreadDatabase::SelectAnnounceFromDb(vector<ANNOUNCE_DATA> &vecAnnounce
                 {
                 case 0:
                     //announceData.announce_id = (int)*sqlRow[i] - 48;
-                    root["announce_id"] = (int)*sqlRow[i] - 48;
+                    root["announce_id"] = atoi(sqlRow[i]);
                     break;
                 case 1:
                     //announceData.strText = sqlRow[i];
@@ -1458,7 +1478,7 @@ BOOL CWinThreadDatabase::SelectAnnounceFromDb(vector<ANNOUNCE_DATA> &vecAnnounce
                     break;
                 case 2:
                     //announceData.type = (int)*sqlRow[i] - 48;
-                    root["type"] = (int)*sqlRow[i] - 48;
+                    root["type"] = atoi(sqlRow[i]);
                     break;
                 default:
                     break;
@@ -1472,7 +1492,7 @@ BOOL CWinThreadDatabase::SelectAnnounceFromDb(vector<ANNOUNCE_DATA> &vecAnnounce
     }
     else
     {
-        ::MessageBox(NULL, _T("mysql_store_result faied！"), _T("错误"), MB_OK);
+        SendMsgToDlg(_T("mysql_store_result faied！"));
         return FALSE;
     }
 
@@ -1491,7 +1511,7 @@ BOOL CWinThreadDatabase::SelectRegisterInfoFromDb(vector<ADD_PERSON_DATA>& vecRe
     int res = mysql_real_query(&m_mysql, pSql, (unsigned long)strlen(pSql));//插入数据
     if (0 != res)
     {
-        ::MessageBox(NULL, _T("SelectRegisterInfoFromDb faied！"), _T("错误"), MB_OK);
+        SendMsgToDlg(_T("SelectRegisterInfoFromDb faied！"));
         return FALSE;
     }
 
@@ -1540,7 +1560,7 @@ BOOL CWinThreadDatabase::SelectRegisterInfoFromDb(vector<ADD_PERSON_DATA>& vecRe
     }
     else
     {
-        ::MessageBox(NULL, _T("mysql_store_result faied！"), _T("错误"), MB_OK);
+        SendMsgToDlg(_T("mysql_store_result faied！"));
         return FALSE;
     }
 
@@ -1559,7 +1579,7 @@ BOOL CWinThreadDatabase::SelectExamInfoFromDb(vector<EXAM_INFO>& vecExamInfo, Js
     int res = mysql_real_query(&m_mysql, pSql, (unsigned long)strlen(pSql));//插入数据
     if (0 != res)
     {
-        ::MessageBox(NULL, _T("SelectExamInfoFromDb faied！"), _T("错误"), MB_OK);
+        SendMsgToDlg(_T("SelectExamInfoFromDb faied！"));
         return FALSE;
     }
 
@@ -1604,7 +1624,7 @@ BOOL CWinThreadDatabase::SelectExamInfoFromDb(vector<EXAM_INFO>& vecExamInfo, Js
     }
     else
     {
-        ::MessageBox(NULL, _T("mysql_store_result faied！"), _T("错误"), MB_OK);
+        SendMsgToDlg(_T("mysql_store_result faied！"));
         return FALSE;
     }
 
@@ -1623,7 +1643,7 @@ BOOL CWinThreadDatabase::SelectAssertHandoverFromDb(vector<ASSERT_DATA>& vecAsse
     int res = mysql_real_query(&m_mysql, pSql, (unsigned long)strlen(pSql));
     if (0 != res)
     {
-        ::MessageBox(NULL, _T("SelectAssertHandoverFromDb faied！"), _T("错误"), MB_OK);
+        SendMsgToDlg(_T("SelectAssertHandoverFromDb faied！"));
         return FALSE;
     }
 
@@ -1680,7 +1700,7 @@ BOOL CWinThreadDatabase::SelectAssertHandoverFromDb(vector<ASSERT_DATA>& vecAsse
     }
     else
     {
-        ::MessageBox(NULL, _T("mysql_store_result faied！"), _T("错误"), MB_OK);
+        SendMsgToDlg(_T("mysql_store_result faied！"));
         return FALSE;
     }
 
@@ -1699,7 +1719,7 @@ BOOL CWinThreadDatabase::SelectWorkloadSalaryInfoFromDb(vector<WORKLOAD_REPORT>&
     int res = mysql_real_query(&m_mysql, pSql, (unsigned long)strlen(pSql));
     if (0 != res)
     {
-        ::MessageBox(NULL, _T("SelectWorkloadSalaryInfoFromDb faied！"), _T("错误"), MB_OK);
+        SendMsgToDlg(_T("SelectWorkloadSalaryInfoFromDb faied！"));
         return FALSE;
     }
 
@@ -1717,24 +1737,25 @@ BOOL CWinThreadDatabase::SelectWorkloadSalaryInfoFromDb(vector<WORKLOAD_REPORT>&
                 switch (i)
                 {
                 case 0:
-                    //registerData.account = A2W(NotNull(sqlRow[i]));
                     root["name"] = NotNull(sqlRow[i]);
                     break;
                 case 1:
-                    //registerData.pwd = A2W(NotNull(sqlRow[i]));
                     root["date"] = NotNull(sqlRow[i]);
                     break;
                 case 2:
-                    //registerData.name = A2W(NotNull(sqlRow[i]));
                     root["fix_salary"] = NotNull(sqlRow[i]);
                     break;
                 case 3:
-                    //registerData.tel = A2W(NotNull(sqlRow[i]));
                     root["workload_salary"] = NotNull(sqlRow[i]);
                     break;
                 case 4:
-                    //registerData.tel = A2W(NotNull(sqlRow[i]));
                     root["reason"] = NotNull(sqlRow[i]);
+                    break;
+                case 5:
+                    root["result"] = atoi(sqlRow[i]);
+                    break;
+                case 6:
+                    root["is_view"] = atoi(sqlRow[i]);
                     break;
                 default:
                     break;
@@ -1748,7 +1769,7 @@ BOOL CWinThreadDatabase::SelectWorkloadSalaryInfoFromDb(vector<WORKLOAD_REPORT>&
     }
     else
     {
-        ::MessageBox(NULL, _T("mysql_store_result faied！"), _T("错误"), MB_OK);
+        SendMsgToDlg(_T("mysql_store_result faied！"));
         return FALSE;
     }
 
@@ -1765,7 +1786,7 @@ BOOL CWinThreadDatabase::UpdateAdminPwdToDb(CString strPwd)
     int res = mysql_real_query(&m_mysql, szTemp, (unsigned long)strlen(szTemp));
     if (0 != res)
     {
-        ::MessageBox(NULL, _T("UpdateAdminPwdToDb faied！"), _T("错误"), MB_OK);
+        SendMsgToDlg(_T("UpdateAdminPwdToDb faied！"));
         return FALSE;
     }
 
@@ -1800,7 +1821,7 @@ BOOL CWinThreadDatabase::UpdatePersonPwdToDb(UPDATE_PERSON_PWD * pPersonPwd)
     int res = mysql_real_query(&m_mysql, szTemp, (unsigned long)strlen(szTemp));
     if (0 != res)
     {
-        ::MessageBox(NULL, _T("UpdateAdminPwdToDb faied！"), _T("错误"), MB_OK);
+        SendMsgToDlg(_T("UpdateAdminPwdToDb faied！"));
         return FALSE;
     }
 
@@ -1820,12 +1841,29 @@ BOOL CWinThreadDatabase::InitThread()
         {
             int i = mysql_errno(&m_mysql);//连接出错
             const char * s = mysql_error(&m_mysql);
-            ::MessageBox(NULL, _T("failed to connect! Please check for your db service."), _T("错误提示"), MB_OK);
+            SendMsgToDlg(_T("failed to connect! Please check for your db service."));
             return FALSE;
         }
     }
 
     return TRUE;
+}
+
+void CWinThreadDatabase::SendMsgToDlg(CString str)
+{
+    std::shared_ptr<CString> msg_ptr(new CString(str));
+    SendMessage(m_mainHwnd, WM_UPDATE_EDIT, reinterpret_cast<WPARAM>(msg_ptr.get()), 0);
+}
+
+void CWinThreadDatabase::PersonIsAlreadyExist()
+{
+    Json::Value root;
+
+    root["code"] = S_CODE_PERSON_EXIT_ERROR;
+    Json::Value *pRoot = new Json::Value;
+    *pRoot = root;
+
+    PostMessage(m_mainHwnd, WM_PERSON_EXIST_ERROR, (WPARAM)pRoot, 0);
 }
 
 

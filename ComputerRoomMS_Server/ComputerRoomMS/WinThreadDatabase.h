@@ -84,7 +84,9 @@ private:
 
 public:
     BOOL InitThread();
-    
+    void SendMsgToDlg(CString str);
+    void SetMainHwnd(HWND hWnd) { m_mainHwnd = hWnd; }
+    void PersonIsAlreadyExist();
 
 private:
     HANDLE                      m_hThread;
@@ -92,6 +94,7 @@ private:
     MYSQL                       m_mysql;
     vector<LOGIN_RESULT>        m_vecLoginResult;
     HWND                        m_tmpHwnd;
+    HWND                        m_mainHwnd;
     //CSocketSrv                  m_sock;
     CString                     m_strIP;
     CString                     m_strPort;

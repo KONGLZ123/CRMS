@@ -47,6 +47,8 @@ BEGIN_MESSAGE_MAP(CLoginDlg, CDialogEx)
     ON_MESSAGE(WM_INITDATA_FAILED, OnInitDataFailed)
     ON_STN_CLICKED(IDC_STATIC_REGISTER, &CLoginDlg::OnStnClickedStaticRegister)
     ON_BN_CLICKED(IDC_BTN_SWITCH, &CLoginDlg::OnBnClickedButton1)
+    ON_MESSAGE(WM_UPDATE_EDIT, OnUpdateEdit)
+    ON_MESSAGE(WM_PERSON_EXIST_ERROR, OnPersonExistError)
 END_MESSAGE_MAP()
 
 
@@ -87,6 +89,7 @@ BOOL CLoginDlg::OnInitDialog()
     ModifyStyle(0, WS_MINIMIZEBOX);
 
     InitDatabaseThread();
+    GetDlgItem(IDC_EDIT_PORT)->SetWindowText(_T("6666"));
 
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
@@ -162,6 +165,7 @@ void CLoginDlg::InitDatabaseThread()
     {
         MessageBox(_T("数据库线程启动失败！"));
     }
+    m_pThreadDatabase->SetMainHwnd(this->m_hWnd);
 }
 
 
@@ -255,25 +259,6 @@ LRESULT CLoginDlg::OnLoginSuccess(WPARAM wParam, LPARAM lParam)
     if (!SendMsgToClient(root))
         return FALSE;
 
-    //CString *pStr = (CString *)wParam;
-    //CString str = *pStr;
-    //delete pStr;
-    //pStr = NULL;
-
-    //ShowWindow(SW_HIDE);
-    //CDlgMain dlg;
-
-    //CComboBox *pComboBox = (CComboBox *)GetDlgItem(IDC_COMBO_ROLE);
-    //ASSERT(pComboBox);
-
-
-
-    //dlg.SetAccount(str);
-    //dlg.SetThreadDatabase(m_pThreadDatabase);
-    //dlg.SetRole(pComboBox->GetCurSel());
-
-    //dlg.DoModal();
-
     return TRUE;
 }
 
@@ -311,6 +296,23 @@ LRESULT CLoginDlg::OnInitDataFailed(WPARAM wParam, LPARAM lParam)
     return LRESULT();
 }
 
+LRESULT CLoginDlg::OnUpdateEdit(WPARAM wParam, LPARAM lParam)
+{
+    CString *str = reinterpret_cast<CString *>(wParam);
+    UpdateEvent(*str);
+    return 1;
+}
+
+LRESULT CLoginDlg::OnPersonExistError(WPARAM wParam, LPARAM lParam)
+{
+    Json::Value *pRoot = (Json::Value *)wParam;
+    SendMsgToClient(*pRoot);
+
+    delete pRoot;
+    pRoot = NULL;
+    return 1;
+}
+
 
 void CLoginDlg::OnStnClickedStaticRegister()
 {
@@ -325,6 +327,16 @@ void CLoginDlg::OnStnClickedStaticRegister()
 // 启动服务器
 void CLoginDlg::OnBnClickedButton1()
 {
+    CString strPort;
+    GetDlgItem(IDC_EDIT_PORT)->GetWindowText(strPort);
+
+    if (strPort.IsEmpty())
+        MessageBox(_T("端口号不能为空！"));
+    USES_CONVERSION;
+    m_port = atoi(W2A(strPort));
+    if (m_port > 65535 || m_port < 0)
+        MessageBox(_T("端口号不合法！"));
+
     if (m_connect)
     {
         delete listenSocket;
@@ -332,6 +344,7 @@ void CLoginDlg::OnBnClickedButton1()
         m_connect = false;
         SetDlgItemText(IDC_BTN_SWITCH, _T("打开服务器"));
         UpdateEvent(_T("系统关闭服务器."));
+        GetDlgItem(IDC_EDIT_PORT)->EnableWindow(TRUE);
         return;
     }
     listenSocket = new CSocketSrv();
@@ -353,6 +366,7 @@ void CLoginDlg::OnBnClickedButton1()
     m_connect = true;
     SetDlgItemText(IDC_BTN_SWITCH, _T("关闭服务器"));
     UpdateEvent(_T("系统打开服务器."));
+    GetDlgItem(IDC_EDIT_PORT)->EnableWindow(FALSE);
 }
 
 void CLoginDlg::AddClient()
@@ -645,6 +659,12 @@ void CLoginDlg::PraseJson(char * buf)
             PostThreadMessage(m_pThreadDatabase->m_nThreadID, WM_UPDATE_SALARY_INFO, (WPARAM)pWorkload, 0);
         }
         break;
+        case S_CODE_DELETE_OLD_ANNOUNCE: {
+            int index = root["index"].asInt();
+
+            PostThreadMessage(m_pThreadDatabase->m_nThreadID, WM_DEL_ANNOUNCE, (WPARAM)index, 0);
+            break;
+        }
         default:
             break;
         }
