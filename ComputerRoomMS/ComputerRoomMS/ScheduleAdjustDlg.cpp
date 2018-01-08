@@ -94,8 +94,9 @@ void CScheduleAdjustDlg::OnBnClickedBtnVerify()
     pClassData->class_num = m_comboClass.GetCurSel() + 1;
     CString strGrage;
     m_comboGrage.GetLBText(m_comboGrage.GetCurSel(), strGrage);
-    pClassData->class_text = strClassName + _T(":教师：") + strTeacherName + _T(":机房号：") + strRoomNum  + _T(":班级：") + strGrage;
+    pClassData->class_text = strClassName + _T("|教师：") + strTeacherName + _T("|机房号：") + strRoomNum  + _T("|班级：") + strGrage;
 
+    ::SendMessage(m_scheduleHwnd, WM_UPDATE_SCHDUEL, (WPARAM)pClassData, 0);
     PostThreadMessage(m_pDbThread->m_nThreadID, WM_UPDATE_CLASS_DATA, (WPARAM)pClassData, 0);
 
     MessageBox(_T("修改成功！"));

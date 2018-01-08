@@ -181,7 +181,7 @@ void CRegisterDlg::OnBnClickedBtnRgRegister()
     if (_T("申请") == m_strBtn)
         GetDlgItem(IDC_STATIC_RG)->SetWindowText(_T("申请成功"));
     else
-        GetDlgItem(IDC_STATIC_RG)->SetWindowText(_T("添加成功"));
+        GetDlgItem(IDC_STATIC_RG)->SetWindowText(_T("提交成功"));
 }
 
 

@@ -32,4 +32,7 @@ public:
     set<CString>            m_setClassName;
     CComboBox m_comboGrage;
     virtual BOOL PreTranslateMessage(MSG* pMsg);
+
+    void SetHwnd(HWND hwnd) { m_scheduleHwnd = hwnd; }
+    HWND m_scheduleHwnd;
 };

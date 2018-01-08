@@ -46,6 +46,7 @@ BEGIN_MESSAGE_MAP(CDlgMain, CDialogEx)
     ON_COMMAND_RANGE(IDC_BTN, IDC_BTN + 10 - 1, OnButtonClick)
     ON_WM_CLOSE()
     ON_MESSAGE(WM_INITDATA_SUCCESS, OnInitDataSuccess)
+    ON_MESSAGE(WM_PERSON_EXIST_ERROR, OnPersonExistError)
 END_MESSAGE_MAP()
 
 
@@ -202,6 +203,7 @@ void CDlgMain::InitData(int role)
         m_scheduleAdjustDlg.Create(CScheduleAdjustDlg::IDD, this);
         m_scheduleAdjustDlg.MoveWindow(150, 0, rcClient.Width() - 150, rcClient.Height(), TRUE);
         m_scheduleAdjustDlg.SetThreadDatabase(m_pDbThread);
+        m_scheduleAdjustDlg.SetHwnd(m_scheduleDlg.m_hWnd);
         btnInfo.pDlg = &m_scheduleAdjustDlg;
         m_vecBtnInfo.push_back(btnInfo);
 
@@ -459,10 +461,12 @@ LRESULT CDlgMain::OnInitDataSuccess(WPARAM wParam, LPARAM lParam)
     break;
     case MANAGER:
     {
+        CString managerName;
         for (UINT i = 0; i < pDataStock->vecRoomManagerInfo.size(); i++)
         {
             if (m_curAccount == pDataStock->vecRoomManagerInfo.at(i).account)
             {
+                managerName = pDataStock->vecRoomManagerInfo.at(i).name;
                 m_setupPwdDlg.SetRoomManagerInfo(pDataStock->vecRoomManagerInfo.at(i));
                 m_roomFaultDlg.SetCurUserName(pDataStock->vecRoomManagerInfo.at(i).name);
                 m_useReportDlg.SetCurUserName(pDataStock->vecRoomManagerInfo.at(i).name);
@@ -486,37 +490,60 @@ LRESULT CDlgMain::OnInitDataSuccess(WPARAM wParam, LPARAM lParam)
                 ++it;
             }
         }
-        
+
+        CString strResult = _T("无结果");
+        for (UINT i = 0; i < pDataStock->vecSalaryInfo.size(); i++)
+        {
+            if (managerName == pDataStock->vecSalaryInfo.at(i).strName)
+            {
+                if (pDataStock->vecSalaryInfo.at(i).isView)
+                    strResult = _T("同意申请");
+                else
+                    strResult = _T("拒绝申请");
+                break;
+            }
+        }
+        m_workloadDlg.SetRequestResult(strResult);
         m_viewAnnounceDlg.SetAnnounceData(pDataStock->vecAnnounceData);
         m_scheduleDlg.SetScheduleInfo(pDataStock->vecScheduleData);
     }
     break;
     case TEACHER:
     {
+        CString strTeacherName;
         for (UINT i = 0; i < pDataStock->vecTeacherInfo.size(); i++)
         {
             if (m_curAccount == pDataStock->vecTeacherInfo.at(i).account)
             {
+                strTeacherName = pDataStock->vecTeacherInfo.at(i).name;
                 m_setupPwdDlg.SetTeacherInfo(pDataStock->vecTeacherInfo.at(i));
-                m_roomFaultDlg.SetCurUserName(pDataStock->vecTeacherInfo.at(i).name);
-                m_requestRoomDlg.SetCurUserName(pDataStock->vecTeacherInfo.at(i).name);
+                m_roomFaultDlg.SetCurUserName(strTeacherName);
+                m_requestRoomDlg.SetCurUserName(strTeacherName);
 
                 vector<ATTENDENCE_INFO> vecAttendenceInfo;
                 for (UINT j = 0; j < pDataStock->vecAttendenceInfo.size(); ++j) {
-                    if (pDataStock->vecAttendenceInfo.at(j).teacher_name == 
-                        pDataStock->vecTeacherInfo.at(i).name) {
+                    if (pDataStock->vecAttendenceInfo.at(j).teacher_name == strTeacherName) {
                         vecAttendenceInfo.push_back(pDataStock->vecAttendenceInfo.at(j));
                     }
                 }
 
+                // 找到教授的班级
+                for (UINT j = 0; j < pDataStock->vecStudentInfo.size(); ++j) {
+                    if (0 == vecAttendenceInfo.size())
+                        break;
+                    if (pDataStock->vecStudentInfo.at(j).student_id == vecAttendenceInfo.at(0).student_id) {
+                        m_studentManageDlg.SetClassName(pDataStock->vecStudentInfo.at(j).classes);
+                        break;
+                    }
+                }
+
                 m_studentManageDlg.SetStudentInfo(vecAttendenceInfo);
-                m_studentManageDlg.SetClassName(pDataStock->vecTeacherInfo.at(i).classes);
 
                 CString strResult = _T("无结果");
                 for (UINT i = 0; i < pDataStock->vecReportData.size(); i++)
                 {
                     if (REQUEST_ROOM == pDataStock->vecReportData.at(i).reportType &&
-                        pDataStock->vecTeacherInfo.at(i).name == pDataStock->vecReportData.at(i).submitPerson)
+                        strTeacherName == pDataStock->vecReportData.at(i).submitPerson)
                     {
                         if (pDataStock->vecReportData.at(i).isView)
                             strResult = _T("同意使用");
@@ -607,6 +634,12 @@ LRESULT CDlgMain::OnInitDataSuccess(WPARAM wParam, LPARAM lParam)
     pDataStock = NULL;
 
     return 0;
+}
+
+LRESULT CDlgMain::OnPersonExistError(WPARAM wParam, LPARAM lParam)
+{
+    MessageBox(_T("添加失败，账号已存在！"));
+    return 1;
 }
 
 

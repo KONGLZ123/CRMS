@@ -32,6 +32,7 @@ void CScheduleDlg::DoDataExchange(CDataExchange* pDX)
 BEGIN_MESSAGE_MAP(CScheduleDlg, CDialogEx)
     ON_CBN_SELCHANGE(IDC_COMBO1, &CScheduleDlg::OnCbnSelchangeCombo1)
     ON_BN_CLICKED(IDC_BTN_SEARCH, &CScheduleDlg::OnBnClickedBtnSearch)
+    ON_MESSAGE(WM_UPDATE_SCHDUEL, OnUpdateSchdule)
 END_MESSAGE_MAP()
 
 
@@ -93,6 +94,39 @@ void CScheduleDlg::SetScheduleInfo(vector<CLASS_DATA>& vecScheduleData)
         m_listSchedule.SetItemText(2, vec.at(i).day, vec.at(i).class_56);
         m_listSchedule.SetItemText(3, vec.at(i).day, vec.at(i).class_78);
     }
+}
+
+LRESULT CScheduleDlg::OnUpdateSchdule(WPARAM wParam, LPARAM lParam)
+{
+    CLASS_DATA* pClassData = (CLASS_DATA *)wParam;
+
+    //m_listSchedule.SetItemText(0, pClassData->day, pClassData->class_text);
+
+    map<int, vector<CLASS_DATA>>::iterator it1;
+    vector<CLASS_DATA>::iterator it2;
+    for (it1 = m_mapWeek2Class.begin(); it1 != m_mapWeek2Class.end(); ++it1) {
+        if (it1->first == pClassData->week) {
+            for (it2 = it1->second.begin(); it2 != it1->second.end(); ++it2) {
+                if (it2->day == pClassData->day) {
+                    if (1 == pClassData->class_num) {
+                        it2->class_12 = pClassData->class_text;
+                    }
+                    else if (2 == pClassData->class_num) {
+                        it2->class_34 = pClassData->class_text;
+                    }
+                    else if (3 == pClassData->class_num) {
+                        it2->class_56 = pClassData->class_text;
+                    }
+                    else if (4 == pClassData->class_num) {
+                        it2->class_78 = pClassData->class_text;
+                    }
+                    return 1;
+                }
+            }            
+        }
+    }
+
+    return 1;
 }
 
 

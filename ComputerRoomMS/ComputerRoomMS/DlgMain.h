@@ -74,6 +74,7 @@ public:
 private:
     void InitData(int role);
     LRESULT OnInitDataSuccess(WPARAM wParam, LPARAM lParam);
+    LRESULT OnPersonExistError(WPARAM wParam, LPARAM lParam);
 
 private:
     CString                 m_curAccount;

@@ -6,7 +6,6 @@
 #include "PersonInfo.h"
 #include "afxdialogex.h"
 #include "DlgMain.h"
-#include "AddPersonDlg.h"
 #include "ViewReigstRequestDlg.h"
 #include "RegisterDlg.h"
 #include "CApplication.h"
@@ -87,19 +86,7 @@ void CPersonInfo::InitCtrls()
     m_listPersonInfo.InsertColumn(2, _T("密码"), LVCFMT_LEFT, columnWidth);
     m_listPersonInfo.InsertColumn(3, _T("姓名"), LVCFMT_LEFT, columnWidth);
     m_listPersonInfo.InsertColumn(4, _T("电话"), LVCFMT_LEFT, columnWidth);
-    //m_listPersonInfo.InsertColumn(5, _T("权限"), LVCFMT_LEFT, columnWidth + 3);
-
-    //m_listPersonInfo.InsertItem(0, _T("1"));
-    //m_listPersonInfo.SetItemText(0, 1, _T("张学友"));
-    //m_listPersonInfo.SetItemText(0, 2, _T("男"));
-    //m_listPersonInfo.SetItemText(0, 3, _T("20170101"));
-    //m_listPersonInfo.SetItemText(0, 4, _T("正常"));
-
-    //m_listPersonInfo.InsertItem(1, _T("2"));
-    //m_listPersonInfo.SetItemText(1, 1, _T("刘德华"));
-    //m_listPersonInfo.SetItemText(1, 2, _T("男"));
-    //m_listPersonInfo.SetItemText(1, 3, _T("20170102"));
-    //m_listPersonInfo.SetItemText(1, 4, _T("锁定"));
+    m_listPersonInfo.InsertColumn(5, _T("权限"), LVCFMT_LEFT, 0);
 }
 
 BOOL CPersonInfo::InitData()
@@ -131,7 +118,7 @@ void CPersonInfo::SetPersonInfo(DATA_STOCK &personInfo)
         m_listPersonInfo.SetItemText(i, 4, roomManagerInfo.tel);
         CString strTemp;
         strTemp.Format(_T("%d"), roomManagerInfo.authority);
-        //m_listPersonInfo.SetItemText(i, 5, strTemp);
+        m_listPersonInfo.SetItemText(i, 5, strTemp);
     }
 }
 
@@ -171,7 +158,7 @@ void CPersonInfo::OnCbnSelchangeComboRole()
             m_listPersonInfo.SetItemText(i, 4, roomManagerInfo.tel);
             CString strTemp;
             strTemp.Format(_T("%d"), roomManagerInfo.authority);
-            //m_listPersonInfo.SetItemText(i, 5, strTemp);
+            m_listPersonInfo.SetItemText(i, 5, strTemp);
         }
     }
     break;
@@ -190,7 +177,7 @@ void CPersonInfo::OnCbnSelchangeComboRole()
             m_listPersonInfo.SetItemText(i, 4, roomRepairInfo.tel);
             CString strTemp;
             strTemp.Format(_T("%d"), roomRepairInfo.authority);
-            //m_listPersonInfo.SetItemText(i, 5, strTemp);
+            m_listPersonInfo.SetItemText(i, 5, strTemp);
         }
     }
     break;
@@ -210,7 +197,7 @@ void CPersonInfo::OnCbnSelchangeComboRole()
             m_listPersonInfo.SetItemText(i, 4, teacherInfo.tel);
             CString strTemp;
             strTemp.Format(_T("%d"), teacherInfo.authority);
-            //m_listPersonInfo.SetItemText(i, 5, strTemp);
+            m_listPersonInfo.SetItemText(i, 5, strTemp);
         }
     }
     break;

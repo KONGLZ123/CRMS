@@ -244,6 +244,9 @@ void CLoginDlg::OnBnClickedLogin()
     ptagLoginRequest->hWnd = m_hWnd;
     PostThreadMessage(m_pThreadDatabase->m_nThreadID, WM_LOGIN, (WPARAM)ptagLoginRequest, (LPARAM)m_hWnd);
 
+    m_curStrAccount = strAccount;
+    
+
     GetDlgItem(IDC_EDIT_ACCOUNT)->SetWindowText(_T(""));
     GetDlgItem(IDC_EDIT_PWD)->SetWindowText(_T(""));
 }
@@ -297,22 +300,21 @@ void CLoginDlg::OnClose()
 
 LRESULT CLoginDlg::OnLoginSuccess(WPARAM wParam, LPARAM lParam)
 {
-    CString *pStr = (CString *)wParam;
-    CString str = *pStr;
-    delete pStr;
-    pStr = NULL;
-
-    ShowWindow(SW_HIDE);
-    CDlgMain dlg;
+    //CString *pStr = (CString *)wParam;
+    //delete pStr;
+    //pStr = NULL;
 
     CComboBox *pComboBox = (CComboBox *)GetDlgItem(IDC_COMBO_ROLE);
     ASSERT(pComboBox);
 
-    dlg.SetAccount(str);
-    dlg.SetThreadDatabase(m_pThreadDatabase);
-    dlg.SetRole(pComboBox->GetCurSel());
+    CDlgMain m_dlgMain;
 
-    dlg.DoModal();
+    m_dlgMain.SetAccount(m_curStrAccount);
+    m_dlgMain.SetThreadDatabase(m_pThreadDatabase);
+    m_dlgMain.SetRole(pComboBox->GetCurSel());
+
+    ShowWindow(SW_HIDE);
+    m_dlgMain.DoModal();
 
     return 0;
 }

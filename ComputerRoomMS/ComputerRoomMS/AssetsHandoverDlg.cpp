@@ -90,6 +90,8 @@ void CAssetsHandoverDlg::OnBnClickedButton4()
     pReportData->strReason = strReason;
 
     PostThreadMessage(m_pDbThread->m_nThreadID, WM_INSERT_ASSERT_DATA, (WPARAM)pReportData, 0);
+
+    MessageBox(_T("提交成功"));
 }
 
 
@@ -127,8 +129,14 @@ void CAssetsHandoverDlg::OnBnClickedBtnPrinter()
     CDocuments docs(objWord.get_Documents());
     CDocument0 testDoc;
 
+    TCHAR szFilePath[MAX_PATH + 1];
+    GetModuleFileName(NULL, szFilePath, MAX_PATH);
+    (_tcsrchr(szFilePath, _T('\\')))[1] = 0;//删除文件名，只获得路径
+    CString curDir = szFilePath;
+    curDir += _T("\\资产交接报告.docx");
+
     testDoc.AttachDispatch(docs.Open(
-        COleVariant(_T("C:\\Users\\KONG\\Desktop\\123.docx"), VT_BSTR),
+        COleVariant(curDir, VT_BSTR),
         covFalse,    // 确认转换
         covFalse,    // 只读
         covFalse,    // 添加到最近文件中
@@ -147,7 +155,7 @@ void CAssetsHandoverDlg::OnBnClickedBtnPrinter()
     )  // Close Open parameters
     ); // Close AttachDispatch(…)
 
-    MessageBox(_T("Now printing 2 copies on the active printer"));
+    MessageBox(_T("开始打印前预览，点击确定开始打印！"));
 
     testDoc.PrintPreview();
 
@@ -181,13 +189,49 @@ void CAssetsHandoverDlg::OnBnClickedBtnPrinter()
 
 void CAssetsHandoverDlg::OnBnClickedBtnExportWord()
 {
+    CString strDeviceName;
+    CString strOwner;
+    CString strRoomNum;
+    CString strInDate;
+    CString strOutDate;
+    CString strReason;
+    CString strStatus;
+
+    GetDlgItem(IDC_EDIT_DEVICE_NAME)->GetWindowText(strDeviceName);
+    GetDlgItem(IDC_EDIT_OWNER)->GetWindowText(strOwner);
+    GetDlgItem(IDC_EDIT_ROOM_NUM)->GetWindowText(strRoomNum);
+    GetDlgItem(IDC_EDIT_IN_DATE)->GetWindowText(strInDate);
+    GetDlgItem(IDC_EDIT_OUT_DATE)->GetWindowText(strOutDate);
+    GetDlgItem(IDC_EDIT_STATUS)->GetWindowText(strStatus);
+    GetDlgItem(IDC_EDIT_REASON11)->GetWindowText(strReason);
+
+    if (strDeviceName.IsEmpty() ||
+        strOwner.IsEmpty() ||
+        strRoomNum.IsEmpty() ||
+        strInDate.IsEmpty() ||
+        strOutDate.IsEmpty() ||
+        strReason.IsEmpty())
+    {
+        ::MessageBox(NULL, _T("编辑框不能为空"), _T("提示"), MB_OK);
+        return;
+    }
+
+    //TCHAR path[MAX_PATH];
+    //GetCurrentDirectory(MAX_PATH, path); // 文件目录保存在path这个字符数组中
+    //CString curDir(path);
+
+    TCHAR szFilePath[MAX_PATH + 1];
+    GetModuleFileName(NULL, szFilePath, MAX_PATH);
+    (_tcsrchr(szFilePath, _T('\\')))[1] = 0;//删除文件名，只获得路径
+    CString curDir = szFilePath;
+
     COleVariant covZero((short)0),
         covTrue((short)TRUE),
         covFalse((short)FALSE),
         covOptional((long)DISP_E_PARAMNOTFOUND, VT_ERROR),
         covDocxType((short)0),
         start_line, end_line,
-        dot(_T("C:\\Users\\KONG\\Desktop\\1234.dot"));
+        dot(curDir + _T("\\报告模板.dot"));
 
     CApplication0 wordApp;
     CDocuments docs;
@@ -207,28 +251,36 @@ void CAssetsHandoverDlg::OnBnClickedBtnExportWord()
     docx = docs.Add(dot, covOptional, covOptional, covOptional);
     bookmarks = docx.get_Bookmarks();
 
-    bookmark = bookmarks.Item(&_variant_t(_T("标题1")));
+    bookmark = bookmarks.Item(&_variant_t(_T("设备名称")));
     range = bookmark.get_Range();
-    range.put_Text(_T("这是标题1"));
+    range.put_Text(strDeviceName);
 
-    bookmark = bookmarks.Item(&_variant_t(_T("标题2")));
+    bookmark = bookmarks.Item(&_variant_t(_T("持有者")));
     range = bookmark.get_Range();
-    range.put_Text(_T("这是标题2"));
+    range.put_Text(strOwner);
 
-    bookmark = bookmarks.Item(&_variant_t(_T("序号1")));
+    bookmark = bookmarks.Item(&_variant_t(_T("所属机房")));
     range = bookmark.get_Range();
-    range.put_Text(_T("1"));
+    range.put_Text(strRoomNum);
 
-    bookmark = bookmarks.Item(&_variant_t(_T("姓名1")));
+    bookmark = bookmarks.Item(&_variant_t(_T("入库时间")));
     range = bookmark.get_Range();
-    range.put_Text(_T("王二小"));
+    range.put_Text(strInDate);
 
-    bookmark = bookmarks.Item(&_variant_t(_T("年龄1")));
+    bookmark = bookmarks.Item(&_variant_t(_T("出库时间")));
     range = bookmark.get_Range();
-    range.put_Text(_T("10"));
+    range.put_Text(strOutDate);
 
-    CString strSavePath = _T("C:\\Users\\KONG\\Desktop");
-    strSavePath += _T("\\haha.docx");
+    bookmark = bookmarks.Item(&_variant_t(_T("现状")));
+    range = bookmark.get_Range();
+    range.put_Text(strStatus);
+
+    bookmark = bookmarks.Item(&_variant_t(_T("其他说明")));
+    range = bookmark.get_Range();
+    range.put_Text(strReason);
+
+    CString strSavePath = curDir;
+    strSavePath += _T("\\资产交接报告.docx");
     docx.SaveAs(COleVariant(strSavePath), covOptional, covOptional, covOptional, covOptional,
         covOptional, covOptional, covOptional, covOptional, covOptional, covOptional, covOptional, covOptional, covOptional, covOptional, covOptional);
 
@@ -239,7 +291,7 @@ void CAssetsHandoverDlg::OnBnClickedBtnExportWord()
     bookmarks.ReleaseDispatch();
     wordApp.ReleaseDispatch();
 
-    AfxMessageBox(_T("haha.docx生成成功！"));
+    AfxMessageBox(_T("资产交接报告.docx生成成功！"));
 }
 
 

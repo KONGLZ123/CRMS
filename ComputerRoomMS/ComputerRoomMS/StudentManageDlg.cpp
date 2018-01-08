@@ -69,62 +69,41 @@ void CStudentManageDlg::SetThreadDatabase(CWinThreadDatabase * pDbThread)
     m_listPersonInfo.SetThreadDatabase(pDbThread);
 }
 
-void CStudentManageDlg::SetStudentInfo(vector<STUDETN_INFO>& vecStudentInfo)
+void CStudentManageDlg::SetStudentInfo(vector<ATTENDENCE_INFO>& vecStudentInfo)
 {
     m_vecStudentInfo = vecStudentInfo;
 
     if (0 == vecStudentInfo.size())
         return;
 
-    m_mapClass2StuInfo.clear();
-    for (unsigned int i = 0; i < m_vecStudentInfo.size(); i++)
-    {
-        m_mapClass2StuInfo[m_vecStudentInfo.at(i).classes].push_back(m_vecStudentInfo.at(i));
-    }
-
-    m_comboClass1.SetCurSel(0);
-
-    // 把第一周的初始化到列表
-    vector<STUDETN_INFO> vec = m_mapClass2StuInfo[m_vecStudentInfo.at(0).classes];
-    STUDETN_INFO stuInfo;
     CString strTmp;
-    for (unsigned int i = 0; i < vec.size(); i++)
+    for (unsigned int i = 0; i < vecStudentInfo.size(); i++)
     {
-        stuInfo = vec.at(i);
-
         strTmp.Format(_T("%d"), i + 1);
         m_listPersonInfo.InsertItem(i, strTmp);
-        m_listPersonInfo.SetItemText(i, 1, stuInfo.student_id);
-        m_listPersonInfo.SetItemText(i, 2, stuInfo.name);
-        //strTmp.Format(_T("%d"), stuInfo.attendece_cnt);
+        m_listPersonInfo.SetItemText(i, 1, vecStudentInfo.at(i).student_id);
+        m_listPersonInfo.SetItemText(i, 2, vecStudentInfo.at(i).student_name);
+        strTmp.Format(_T("%d"), vecStudentInfo.at(i).attendece_cnt);
         m_listPersonInfo.SetItemText(i, 3, strTmp);
-        //strTmp.Format(_T("%d"), stuInfo.attendece_score);
+        strTmp.Format(_T("%d"), vecStudentInfo.at(i).attendece_score);
         m_listPersonInfo.SetItemText(i, 4, strTmp);
     }
 }
 
-void CStudentManageDlg::SetClassName(set<CString> setClassName)
+void CStudentManageDlg::SetClassName(CString setClassName)
 {
-    m_setClassName = setClassName;
-
-    set<CString>::iterator it;
-    int i = 0;
-    for (it = m_setClassName.begin(); it != m_setClassName.end(); ++it, i++)
+    if (setClassName.IsEmpty())
     {
-        m_comboClass1.InsertString(i, *it);
-        m_comboClass2.InsertString(i, *it);
-    }
-    if (0 == m_comboClass1.GetCount())
-    {
-        MessageBox(_T("学生为空，请导入学生信息后再进行课程调整"));
         m_comboClass1.InsertString(0, _T("班级信息为空"));
         m_comboClass2.InsertString(0, _T("班级信息为空"));
     }
     else
     {
-        m_comboClass1.SetCurSel(0);
-        m_comboClass2.SetCurSel(0);
+        m_comboClass1.InsertString(0, setClassName);
+        m_comboClass2.InsertString(0, setClassName);
     }
+    m_comboClass1.SetCurSel(0);
+    m_comboClass2.SetCurSel(0);
 }
 
 void CStudentManageDlg::OnBnClickedBtnDeclareExam()
@@ -154,33 +133,35 @@ void CStudentManageDlg::OnBnClickedBtnDeclareExam()
     pExamInfo->strClass = strClass;
 
     PostThreadMessage(m_pDbThread->m_nThreadID, WM_DECALRE_EXAM_INFO, (WPARAM)pExamInfo, 0);
+
+    ::MessageBox(NULL, _T("发布成功"), _T("提示"), MB_OK);
 }
 
 
 void CStudentManageDlg::OnCbnSelchangeComboClassName1()
 {
-    m_listPersonInfo.DeleteAllItems();
+    //m_listPersonInfo.DeleteAllItems();
 
-    CString strText;
-    m_comboClass1.GetLBText(m_comboClass1.GetCurSel(), strText);
+    //CString strText;
+    //m_comboClass1.GetLBText(m_comboClass1.GetCurSel(), strText);
 
-    // 把第一周的初始化到列表
-    vector<STUDETN_INFO> vec = m_mapClass2StuInfo[strText];
-    STUDETN_INFO stuInfo;
-    CString strTmp;
-    for (unsigned int i = 0; i < vec.size(); i++)
-    {
-        stuInfo = vec.at(i);
+    //// 把第一周的初始化到列表
+    //vector<STUDETN_INFO> vec = m_mapClass2StuInfo[strText];
+    //STUDETN_INFO stuInfo;
+    //CString strTmp;
+    //for (unsigned int i = 0; i < vec.size(); i++)
+    //{
+    //    stuInfo = vec.at(i);
 
-        strTmp.Format(_T("%d"), i + 1);
-        m_listPersonInfo.InsertItem(i, strTmp);
-        m_listPersonInfo.SetItemText(i, 1, stuInfo.student_id);
-        m_listPersonInfo.SetItemText(i, 2, stuInfo.name);
-        //strTmp.Format(_T("%d"), stuInfo.attendece_cnt);
-        m_listPersonInfo.SetItemText(i, 3, strTmp);
-        //strTmp.Format(_T("%d"), stuInfo.attendece_score);
-        m_listPersonInfo.SetItemText(i, 4, strTmp);
-    }
+    //    strTmp.Format(_T("%d"), i + 1);
+    //    m_listPersonInfo.InsertItem(i, strTmp);
+    //    m_listPersonInfo.SetItemText(i, 1, stuInfo.student_id);
+    //    m_listPersonInfo.SetItemText(i, 2, stuInfo.name);
+    //    //strTmp.Format(_T("%d"), stuInfo.attendece_cnt);
+    //    m_listPersonInfo.SetItemText(i, 3, strTmp);
+    //    //strTmp.Format(_T("%d"), stuInfo.attendece_score);
+    //    m_listPersonInfo.SetItemText(i, 4, strTmp);
+    //}
 }
 
 

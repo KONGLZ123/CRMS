@@ -7,6 +7,7 @@
 #include "data.h"
 #include "WinThreadDatabase.h"
 #include "AGLinkCtrl.h"
+#include "DlgMain.h"
 
 // CComputerRoomMSDlg ¶Ô»°¿ò
 class CLoginDlg : public CDialogEx
@@ -69,6 +70,7 @@ public:
     CStatic     m_staticLogo;
     CAGLinkCtrl m_linkCtrlRegister;
     CString     m_curStrAccount;
+    
 
     CSocketClient               m_sock;
     CString                     m_strIP;

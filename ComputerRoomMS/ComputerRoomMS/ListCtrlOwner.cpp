@@ -207,7 +207,7 @@ void CListCtrlOwner::OnLButtonDown(UINT nFlags, CPoint point)
                     USES_CONVERSION;
                     pWorkload->strName = this->GetItemText(m_Row, 1);
                     pWorkload->strDate = this->GetItemText(m_Row, 2);
-                    pWorkload->strWorkloadSalary = this->GetItemText(m_Row, 6);
+                    pWorkload->result = atoi(W2A(this->GetItemText(m_Row, 6)));
                     if (this->GetItemText(m_Row, 7) == _T("ÊÇ")) {
                         pWorkload->isView = 1;
                     }

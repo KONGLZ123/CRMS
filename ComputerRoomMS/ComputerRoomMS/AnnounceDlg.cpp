@@ -102,6 +102,7 @@ void CAnnounceDlg::OnBnClickedBtnDelAnnounce()
     for (ite = m_vecAnnounceData.begin(); ite != m_vecAnnounceData.end(); ++ite) {
         if (ite->announce_id == m_pageIndex + 1)
         {
+            //m_vecAnnounceData.erase(ite);
             ite->strText = _T("公告已删除");
             GetDlgItem(IDC_EDIT_OLD_ANNOUNCE)->SetWindowText(_T("公告已删除"));
         }

@@ -24,4 +24,5 @@ private:
 public:
     virtual BOOL OnInitDialog();
     virtual BOOL PreTranslateMessage(MSG* pMsg);
+
 };

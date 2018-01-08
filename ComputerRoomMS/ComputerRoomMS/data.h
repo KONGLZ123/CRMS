@@ -25,6 +25,8 @@ using namespace std;
 #define S_CODE_UPDATE_ROOM_REQUEST  2018
 #define S_CODE_UPDATE_SALARY_INFO   2019
 #define S_CODE_UPDATE_EXAM_INFO     2020
+#define S_CODE_DELETE_OLD_ANNOUNCE  2021
+#define S_CODE_PERSON_EXIT_ERROR    2022
 
 enum {
     ADMIN = 0,
@@ -174,6 +176,7 @@ struct WORKLOAD_REPORT
     CString strDate;
     CString strFixSalary;
     CString strWorkloadSalary;
+    int result;
     //CString reason;
     //CString notes;
     int isView;
@@ -381,4 +384,5 @@ struct DATA_STOCK
 #define WM_UPDATE_EXAM_INFO               WM_USER + 2531
 #define WM_UPDATE_SALARY_LIST_ITEM        WM_USER + 2532
 #define WM_UPDATE_SALARY_INFO             WM_USER + 2533
-
+#define WM_UPDATE_SCHDUEL                 WM_USER + 2534
+#define WM_PERSON_EXIST_ERROR             WM_USER + 2535

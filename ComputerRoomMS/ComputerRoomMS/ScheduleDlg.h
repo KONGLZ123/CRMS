@@ -22,6 +22,7 @@ protected:
 
 public:
     void SetScheduleInfo(vector<CLASS_DATA> & vecScheduleData);
+    LRESULT OnUpdateSchdule(WPARAM wParam, LPARAM lParam);
 
 private:
     CListCtrlOwner              m_listSchedule;

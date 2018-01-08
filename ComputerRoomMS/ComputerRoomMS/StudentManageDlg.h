@@ -23,13 +23,13 @@ protected:
 public:
     virtual BOOL OnInitDialog();
     void SetThreadDatabase(CWinThreadDatabase *pDbThread);
-    void SetStudentInfo(vector<STUDETN_INFO>& vecStudentInfo);
-    void SetClassName(set<CString> setClassName);
+    void SetStudentInfo(vector<ATTENDENCE_INFO>& vecStudentInfo);
+    void SetClassName(CString setClassName);
 
 private:
     CListCtrlOwner              m_listPersonInfo;
     CWinThreadDatabase*         m_pDbThread;
-    vector<STUDETN_INFO>        m_vecStudentInfo;
+    vector<ATTENDENCE_INFO>     m_vecStudentInfo;
     set<CString>                m_setClassName;
 public:
     afx_msg void OnBnClickedBtnDeclareExam();
@@ -37,7 +37,7 @@ public:
     CComboBox m_comboClass1;
     CComboBox m_comboClass2;
     afx_msg void OnCbnSelchangeComboClassName1();
-    map<CString, vector<STUDETN_INFO>> m_mapClass2StuInfo;
+    map<CString, vector<ATTENDENCE_INFO>> m_mapClass2StuInfo;
     virtual BOOL PreTranslateMessage(MSG* pMsg);
     LRESULT OnUpdateStudentListItem(WPARAM wParam, LPARAM lParam);
 };

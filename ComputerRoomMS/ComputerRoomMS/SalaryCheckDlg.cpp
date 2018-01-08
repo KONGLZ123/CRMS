@@ -50,14 +50,21 @@ void CSalaryCheckDlg::SetSalaryInfo(vector<WORKLOAD_REPORT>& vecSalaryInfo)
     for (int i = 0; i < size; i++)
     {
         WORKLOAD_REPORT salaryInfo = m_vecSalaryInfo.at(i);
-        CString strId;
-        strId.Format(_T("%d"), i + 1);
-        m_listSalaryCheck.InsertItem(i, strId);
+        CString tmp;
+        tmp.Format(_T("%d"), i + 1);
+        m_listSalaryCheck.InsertItem(i, tmp);
         m_listSalaryCheck.SetItemText(i, 1, salaryInfo.strName);
         m_listSalaryCheck.SetItemText(i, 2, salaryInfo.strDate);
         m_listSalaryCheck.SetItemText(i, 3, salaryInfo.strFixSalary);
         m_listSalaryCheck.SetItemText(i, 4, salaryInfo.strWorkloadSalary);
         m_listSalaryCheck.SetItemText(i, 5, salaryInfo.strReason);
+
+        tmp.Format(_T("%d"), salaryInfo.result);
+        m_listSalaryCheck.SetItemText(i, 6, tmp);
+        if (salaryInfo.isView)
+            m_listSalaryCheck.SetItemText(i, 7, _T("ÊÇ"));
+        else
+            m_listSalaryCheck.SetItemText(i, 7, _T("·ñ"));
     }
 }
 
@@ -128,7 +135,7 @@ LRESULT CSalaryCheckDlg::OnUpdateSalaryListItem(WPARAM wParam, LPARAM lParam)
     for (it = m_vecSalaryInfo.begin(); it != m_vecSalaryInfo.end(); ++it) {
         if (it->strName == pWorkload->strName &&
             it->strDate == pWorkload->strDate) {
-            it->strWorkloadSalary = pWorkload->strWorkloadSalary;
+            it->result = pWorkload->result;
             it->isView = pWorkload->isView;
             break;
         }

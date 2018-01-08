@@ -68,6 +68,8 @@ void CRequestRoomDlg::OnBnClickedButton1()
     pReportData->reportType = REQUEST_ROOM;
 
     PostThreadMessage(m_pDbThread->m_nThreadID, WM_INSERT_REPORT, (WPARAM)pReportData, 0);
+
+    ::MessageBox(NULL, _T("提交成功"), _T("提示"), MB_OK);
 }
 
 void CRequestRoomDlg::SetCurUserName(CString strUserName)
