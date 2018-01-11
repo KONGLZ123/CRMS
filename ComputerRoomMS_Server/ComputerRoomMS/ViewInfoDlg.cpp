@@ -46,7 +46,7 @@ void CViewInfoDlg::SetReportData(vector<REPORT_DATA> & reportData)
             m_listChectReport.SetItemText(j, 1, reportData.submitPerson);
             m_listChectReport.SetItemText(j, 2, reportData.uploadDate);
             m_listChectReport.SetItemText(j, 3, reportData.reason);
-            m_listChectReport.SetItemText(j, 4, reportData.notes);
+            //m_listChectReport.SetItemText(j, 4, reportData.notes);
             j++;
         }
     }
@@ -69,8 +69,8 @@ void CViewInfoDlg::InitCtrl()
     m_listChectReport.InsertColumn(0, _T("序号"), LVCFMT_LEFT, 45);
     m_listChectReport.InsertColumn(1, _T("提交者"), LVCFMT_LEFT, 60);
     m_listChectReport.InsertColumn(2, _T("日期"), LVCFMT_LEFT, 60);
-    m_listChectReport.InsertColumn(3, _T("状况"), LVCFMT_LEFT, 150);
-    m_listChectReport.InsertColumn(4, _T("特殊情况说明"), LVCFMT_LEFT, rcClient.Width() - 315);
+    m_listChectReport.InsertColumn(3, _T("说明"), LVCFMT_LEFT, rcClient.Width() - 165);
+    //m_listChectReport.InsertColumn(4, _T("特殊情况说明"), LVCFMT_LEFT, rcClient.Width() - 315);
 }
 
 
@@ -111,7 +111,7 @@ void CViewInfoDlg::OnCbnSelchangeComboReportStyle()
             m_listChectReport.SetItemText(j, 1, reportData.submitPerson);
             m_listChectReport.SetItemText(j, 2, reportData.uploadDate);
             m_listChectReport.SetItemText(j, 3, reportData.reason);
-            m_listChectReport.SetItemText(j, 4, reportData.notes);
+            //m_listChectReport.SetItemText(j, 4, reportData.notes);
             j++;
         }
     }

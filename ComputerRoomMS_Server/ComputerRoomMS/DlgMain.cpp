@@ -491,7 +491,15 @@ LRESULT CDlgMain::OnInitDataSuccess(WPARAM wParam, LPARAM lParam)
                 break;
             }
         }
-        m_viewRepairDlg.SeRepairData(pDataStock->vecReportData);
+
+        vector<REPORT_DATA> vecReportData;
+        int i = 0;
+        for (auto it = pDataStock->vecReportData.begin(); it != pDataStock->vecReportData.end(); ++it, ++i) {
+            if (it->reportType == REQUEST_REPAIR) {
+                vecReportData.push_back(pDataStock->vecReportData.at(i));
+            }
+        }
+        m_viewRepairDlg.SeRepairData(vecReportData);
     }
     break;
     case STUDENT:

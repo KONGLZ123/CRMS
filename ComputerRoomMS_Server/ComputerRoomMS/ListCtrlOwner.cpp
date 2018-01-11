@@ -177,7 +177,6 @@ void CListCtrlOwner::OnMenuClicked()
     }
 }
 
-
 BOOL CListCtrlOwner::PreTranslateMessage(MSG* pMsg)
 {
     BOOL bHandledMsg = FALSE;

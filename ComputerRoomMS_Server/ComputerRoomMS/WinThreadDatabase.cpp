@@ -601,7 +601,7 @@ void CWinThreadDatabase::OnInsertAssertData(WPARAM wParam, LPARAM lParam)
     char* pReason = W2A(pReportData->strReason);
     pReportData->isView = 0;
 
-    char szTemp[200];
+    char szTemp[400];
     sprintf(szTemp, INSERT_ASSERT_DATA, pDeviceName, pOwner, pRoomNum, pInDate, pOutDate, pStatus, pReason);
     int res = mysql_real_query(&m_mysql, szTemp, (unsigned long)strlen(szTemp));//插入数据
     if (0 != res)
@@ -642,10 +642,9 @@ void CWinThreadDatabase::OnUpdateSalaryInfo(WPARAM wParam, LPARAM lParam)
     USES_CONVERSION;
     char* pName = W2A(pWorkload->strName);
     char* pDate = W2A(pWorkload->strDate);
-    char* pload = W2A(pWorkload->strWorkloadSalary);
 
     char szTemp[200];
-    sprintf(szTemp, UPDATE_SALARY_DATE, pload, pWorkload->isView, pName, pDate);
+    sprintf(szTemp, UPDATE_SALARY_DATE, pWorkload->result, pWorkload->isView, pName, pDate);
     int res = mysql_real_query(&m_mysql, szTemp, (unsigned long)strlen(szTemp));//插入数据
     if (0 != res)
     {
@@ -1843,6 +1842,9 @@ BOOL CWinThreadDatabase::InitThread()
             const char * s = mysql_error(&m_mysql);
             SendMsgToDlg(_T("failed to connect! Please check for your db service."));
             return FALSE;
+        }
+        else {
+            mysql_query(&m_mysql, "SET NAMES 'gbk'");//设置数据库字符格式，解决中文乱码问题
         }
     }
 

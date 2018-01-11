@@ -57,8 +57,11 @@ void CWorkloadDlg::OnBnClickedButton4()
     pReportData->uploadDate = strTime;
     pReportData->notes = _T("");
     pReportData->reportType = REQUEST_REPAIR;
+    pReportData->isView = 0;
 
     PostThreadMessage(m_pDbThread->m_nThreadID, WM_REQUEST_REPAIR, (WPARAM)pReportData, 0);
+
+    MessageBox(_T("提交成功！"));
 }
 
 
