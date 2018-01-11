@@ -91,7 +91,7 @@ void CAssetsHandoverDlg::OnBnClickedButton4()
 
     PostThreadMessage(m_pDbThread->m_nThreadID, WM_INSERT_ASSERT_DATA, (WPARAM)pReportData, 0);
 
-    MessageBox(_T("提交成功"));
+    ::MessageBox(NULL, _T("提交成功"), _T("提示"), MB_OK);
 }
 
 
@@ -155,7 +155,7 @@ void CAssetsHandoverDlg::OnBnClickedBtnPrinter()
     )  // Close Open parameters
     ); // Close AttachDispatch(…)
 
-    MessageBox(_T("开始打印前预览，点击确定开始打印！"));
+    //MessageBox(_T("开始打印前预览，点击确定开始打印！"));
 
     testDoc.PrintPreview();
 

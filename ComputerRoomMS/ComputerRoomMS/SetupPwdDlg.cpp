@@ -136,7 +136,8 @@ void CSetupPwdDlg::OnBnClickedBtnPersonSetup()
     pPersonPwd->newPwd = strNewPwd1;
     PostThreadMessage(m_pDbThread->m_nThreadID, WM_SETUP_PWD, (WPARAM)pPersonPwd, 0);
 
-    GetDlgItem(IDC_STATIC_PERSON_SETUP)->SetWindowText(_T("修改成功！"));
+    ::MessageBox(NULL, _T("修改成功"), _T("提示"), MB_OK);
+    //GetDlgItem(IDC_STATIC_PERSON_SETUP)->SetWindowText(_T("修改成功！"));
 }
 
 

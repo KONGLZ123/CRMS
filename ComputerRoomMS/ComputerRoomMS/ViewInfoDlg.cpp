@@ -93,9 +93,9 @@ void CViewInfoDlg::InitCtrl()
     m_listChectReport.InsertColumn(0, _T("序号"), LVCFMT_LEFT, 45);
     m_listChectReport.InsertColumn(1, _T("提交者"), LVCFMT_LEFT, 60);
     m_listChectReport.InsertColumn(2, _T("日期"), LVCFMT_LEFT, 120); // 225
-    m_listChectReport.InsertColumn(3, _T("状况"), LVCFMT_LEFT, 150);
-    m_listChectReport.InsertColumn(4, _T("特殊情况说明"), LVCFMT_LEFT, rcClient.Width() - 375);
-    m_listChectReport.InsertColumn(5, _T("同意"), LVCFMT_LEFT, 0);
+    m_listChectReport.InsertColumn(3, _T("状况"), LVCFMT_LEFT, rcClient.Width() - 225);
+    //m_listChectReport.InsertColumn(4, _T("特殊情况说明"), LVCFMT_LEFT, rcClient.Width() - 375);
+    m_listChectReport.InsertColumn(4, _T("同意"), LVCFMT_LEFT, 0);
 }
 
 
@@ -130,13 +130,15 @@ void CViewInfoDlg::OnCbnSelchangeComboReportStyle()
     if (3 == selType) {
         m_listChectReport.SetStyle(LIST_STYLE_ROOM_REQUEST);
 
-        m_listChectReport.SetColumnWidth(4, rcClient.Width() - 425);
-        m_listChectReport.SetColumnWidth(5, 50);
+        //m_listChectReport.SetColumnWidth(4, rcClient.Width() - 425);
+        m_listChectReport.SetColumnWidth(3, rcClient.Width() - 275);
+        m_listChectReport.SetColumnWidth(4, 50);
     }
     else {
         m_listChectReport.SetStyle(LIST_STYLE_NORMAL);
-        m_listChectReport.SetColumnWidth(4, rcClient.Width() - 375);
-        m_listChectReport.SetColumnWidth(5, 0);
+        //m_listChectReport.SetColumnWidth(4, rcClient.Width() - 375);
+        m_listChectReport.SetColumnWidth(3, rcClient.Width() - 225);
+        m_listChectReport.SetColumnWidth(4, 0);
     }
 
     int size = m_reportData.size();
@@ -150,11 +152,11 @@ void CViewInfoDlg::OnCbnSelchangeComboReportStyle()
             m_listChectReport.SetItemText(j, 1, reportData.submitPerson);
             m_listChectReport.SetItemText(j, 2, reportData.uploadDate);
             m_listChectReport.SetItemText(j, 3, reportData.reason);
-            m_listChectReport.SetItemText(j, 4, reportData.notes);
+            //m_listChectReport.SetItemText(j, 4, reportData.notes);
             if (reportData.isView)
-                m_listChectReport.SetItemText(j, 5, _T("是"));
+                m_listChectReport.SetItemText(j, 4, _T("是"));
             else
-                m_listChectReport.SetItemText(j, 5, _T("否"));
+                m_listChectReport.SetItemText(j, 4, _T("否"));
             j++;
         }
     }

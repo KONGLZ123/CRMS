@@ -86,12 +86,13 @@ void CWorkloadDlg::OnBnClickedBtnDeclaration()
     pReportData->strDate = strDate;
     pReportData->strFixSalary = strFixSalary;
     pReportData->strWorkloadSalary = strWorkloadSalary;
+    pReportData->result = 0;
+    pReportData->isView = 0;
 
     PostThreadMessage(m_pDbThread->m_nThreadID, WM_INSERT_WORKLOAD_REPORT, (WPARAM)pReportData, 0);
 
     ::MessageBox(NULL, _T("提交成功"), _T("提示"), MB_OK);
 }
-
 
 BOOL CWorkloadDlg::PreTranslateMessage(MSG* pMsg)
 {

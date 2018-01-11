@@ -224,11 +224,6 @@ void CPersonInfo::OnBnClickedBtnSearchStudent()
         STUDETN_INFO studetnInfo = m_personInfo.vecStudentInfo.at(i);
         if (strStuId == studetnInfo.student_id)
         {
-            //studetnInfo.student_id
-            //studetnInfo.pwd
-            //studetnInfo.name
-            //studetnInfo.tel
-            //studetnInfo.authority
             CSearchResultDlg dlg;
             dlg.SetStudentInfo(studetnInfo);
             dlg.DoModal();
@@ -244,42 +239,13 @@ void CPersonInfo::OnBnClickedBtnSearchStudent()
 
 void CPersonInfo::OnBnClickedBtnUpload()
 {
-    //CString FilePathName;
-    //CFileDialog dlg(TRUE, //TRUE为OPEN对话框，FALSE为SAVE AS对话框
-    //    _T("*.xlsx"),
-    //    NULL,
-    //    OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT,
-    //    (LPCTSTR)_T("Excel (*.xlsx)|*.xlsx | 所有文件 (*.*)|*.*||"),
-    //    NULL);
-
     CFileDialog  dlg(TRUE, _T("*.xlsx"), NULL, OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT, _T("Xls文件 (*.xlsx)|*.xlsx"));
     dlg.m_ofn.lpstrTitle = L"打开文件";
     CString FilePathName;
-    //if (IDOK == dlg.DoModal())
-    //{
-    //    FilePathName = dlg.GetPathName();
-    //}
-    //else
-    //{
-    //    return;
-    //}
 
     if (dlg.DoModal() == IDOK)
     {
         FilePathName = dlg.GetPathName(); //文件名保存在了FilePathName里
-
-        //CFileDialog  filedlg(TRUE, L"*.xlsx", NULL, OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT, L"Xls文件 (*.xlsx)|*.xlsx");
-        //filedlg.m_ofn.lpstrTitle = L"打开文件";
-        //CString strFilePath;
-        //if (IDOK == filedlg.DoModal())
-        //{
-        //    strFilePath = filedlg.GetPathName();
-        //}
-        //else
-        //{
-        //    return;
-        //}
-
         CApplication app;
         CWorkbook book;
         CWorkbooks books;
@@ -304,10 +270,8 @@ void CPersonInfo::OnBnClickedBtnUpload()
         sheets = book.get_Worksheets();
         sheet = sheets.get_Item(COleVariant((short)1));
 
-
         //app.put_Visible(TRUE); //表格可见
         //app.put_UserControl(FALSE); 
-
 
         ////获得坐标为（A，1）的单元格
         /*range = sheet.get_Range(COleVariant(_T("A1"))
@@ -320,10 +284,7 @@ void CPersonInfo::OnBnClickedBtnUpload()
         ////转换格式，并输出
         //this->MessageBox(CString(rValue.bstrVal));
 
-
         /*读取Excel表中的多个单元格的值，在listctrl中显示*/
-
-
         COleVariant vResult;
 
         //读取已经使用区域的信息，包括已经使用的行数、列数、起始行、起始列
@@ -337,10 +298,6 @@ void CPersonInfo::OnBnClickedBtnUpload()
 
         for (int i = iStartRow; i <= iRowNum; i++)
         {
-            /*CString strRowName = _T("");
-            strRowName.Format(_T("%d"), i);
-            m_ListCtrl.InsertItem(i-1, strRowName);*/
-            
             if (1 == i)
                 continue;
 
@@ -383,7 +340,7 @@ void CPersonInfo::OnBnClickedBtnUpload()
                 {
                 case 1:
                 {
-                    ptagAddPerson->id = str;
+                    ptagAddPerson->account = str;
                     break;
                 }
                 case 2:
@@ -402,31 +359,34 @@ void CPersonInfo::OnBnClickedBtnUpload()
                     ptagAddPerson->grade = str; // 班级
                 }
                 break;
-                case 5:
+                case 5: // 专业
                 {
                     ptagAddPerson->major = str;
                 }
                 break;
+                case 6: { // 课程
+                    ptagAddPerson->course = str;
+                    break;
+                }
                 default:
                     break;
                 }
-
-                // m_ListCtrl.SetItemText(i-1, j, str);
             } // end for j
 
             //ptagAddPerson->account = ptagAddPerson->id;
-            ptagAddPerson->pwd = ptagAddPerson->id;
+            ptagAddPerson->pwd = ptagAddPerson->account;
             ptagAddPerson->authority = STUDENT;
             ptagAddPerson->bIsRegister = FALSE;
 
             STUDETN_INFO stuInfo;
             stuInfo.authority = ptagAddPerson->authority;
-            stuInfo.student_id = ptagAddPerson->id;
-            stuInfo.pwd = ptagAddPerson->id;
+            stuInfo.student_id = ptagAddPerson->account;
+            stuInfo.pwd = ptagAddPerson->account;
             stuInfo.name = ptagAddPerson->name;
             stuInfo.classes = ptagAddPerson->grade;
             stuInfo.major = ptagAddPerson->major;
             stuInfo.tel = ptagAddPerson->tel;
+            stuInfo.course = ptagAddPerson->course;
             m_personInfo.vecStudentInfo.push_back(stuInfo);
 
             PostThreadMessage(m_pDbThread->m_nThreadID, WM_ADD_PERSON, (WPARAM)ptagAddPerson, NULL);

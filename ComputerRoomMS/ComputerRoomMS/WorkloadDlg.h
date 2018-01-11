@@ -11,9 +11,7 @@ public:
 	CWorkloadDlg(CWnd* pParent = NULL);   // 标准构造函数
 	virtual ~CWorkloadDlg();
 
-
 	enum { IDD = IDD_DLG_REQUEST_WORKLOAD };
-
 
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 支持

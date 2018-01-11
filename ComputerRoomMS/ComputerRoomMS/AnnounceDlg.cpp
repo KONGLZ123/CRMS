@@ -91,6 +91,8 @@ void CAnnounceDlg::OnBnClickedBtnAnnounce()
     pAnnouce->strText = _T("发布日期") + strTime + _T("\r\n\r\n") + strText;
     pAnnouce->type = type;
     PostThreadMessage(m_pDbThread->m_nThreadID, WM_DECLARE_ANNOUNCE, (WPARAM)pAnnouce, (LPARAM)m_hWnd);
+
+    MessageBox(_T("发布成功"));
 }
 
 

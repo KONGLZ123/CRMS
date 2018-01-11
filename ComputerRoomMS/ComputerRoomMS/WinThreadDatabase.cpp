@@ -356,6 +356,7 @@ void CWinThreadDatabase::OnInsertWorkload(WPARAM wParam, LPARAM lParam)
     root["date"] = W2A(pReportData->strDate);
     root["fix_salary"] = W2A(pReportData->strFixSalary);
     root["workload_salary"] = W2A(pReportData->strWorkloadSalary);
+    root["result"] = atoi(W2A(pReportData->strFixSalary)) + atoi(W2A(pReportData->strWorkloadSalary));
     root["is_view"] = 0;
 
     SendMsgToServer(root);
@@ -748,11 +749,15 @@ BOOL CWinThreadDatabase::SelectRegisterInfoFromDb(vector<ADD_PERSON_DATA>& vecRe
     {
         ADD_PERSON_DATA registerData;
 
-        registerData.account = CString(root["registerInfo"][i]["account"].asString().c_str());
-        registerData.pwd = CString(root["registerInfo"][i]["pwd"].asString().c_str());
-        registerData.name = CString(root["registerInfo"][i]["name"].asString().c_str());
-        registerData.tel = CString(root["registerInfo"][i]["tel"].asString().c_str());
+        registerData.account = root["registerInfo"][i]["account"].asCString();
+        registerData.pwd = root["registerInfo"][i]["pwd"].asCString();
+        registerData.name = root["registerInfo"][i]["name"].asCString();
+        registerData.tel = root["registerInfo"][i]["tel"].asCString();
         registerData.authority = root["registerInfo"][i]["authority"].asInt();
+
+        registerData.grade = root["registerInfo"][i]["grade"].asCString();
+        registerData.major = root["registerInfo"][i]["major"].asCString();
+        registerData.course = root["registerInfo"][i]["course"].asCString();
 
         vecRegisterData.push_back(registerData);
     }
