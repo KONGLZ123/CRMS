@@ -153,7 +153,7 @@ struct STUDETN_INFO
     CString classes;
     CString major;
     //CString college;
-    //CString exam;
+    CString course;
     int authority;
     //int attendece_cnt;      // 出勤次数
     //int attendece_score;    // 考勤分数

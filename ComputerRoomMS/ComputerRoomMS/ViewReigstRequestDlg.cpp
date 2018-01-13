@@ -132,14 +132,19 @@ void CViewReigstRequestDlg::OnBnClickedBtnOk()
     ptagAddPerson->bIsRegister = FALSE;
 
     if (STUDENT == ptagAddPerson->authority) {
-        ptagAddPerson->id = m_registerData.id;
+        //ptagAddPerson->id = m_registerData.id;
         ptagAddPerson->grade = m_registerData.grade;
         ptagAddPerson->major = m_registerData.major;
+        ptagAddPerson->course = m_registerData.course;
+    }
+    else if (TEACHER == ptagAddPerson->authority) {
+        ptagAddPerson->grade = m_registerData.grade;
+        ptagAddPerson->course = m_registerData.course;
     }
 
     PostThreadMessage(m_pDbThread->m_nThreadID, WM_ADD_PERSON, (WPARAM)ptagAddPerson, (LPARAM)m_hWnd);
 
-    // 删除注册表里面的数据
+    // 删除编辑框里面的数据
     OnBnClickedRefuse();
 }
 

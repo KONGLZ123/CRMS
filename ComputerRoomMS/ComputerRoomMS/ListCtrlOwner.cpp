@@ -359,7 +359,7 @@ void CListCtrlOwner::OnLButtonDblClk(UINT nFlags, CPoint point)
             m_Col = hi.iSubItem;
 
             int isView;
-            if (5 == m_Col) {
+            if (4 == m_Col) {
                 if (this->GetItemText(m_Row, m_Col) == _T("·ñ")) {
                     this->SetItemText(m_Row, m_Col, _T("ÊÇ"));
                     isView = 1;
