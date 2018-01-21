@@ -618,14 +618,11 @@ LRESULT CDlgMain::OnInitDataSuccess(WPARAM wParam, LPARAM lParam)
         }
         vector<ANNOUNCE_DATA>::iterator it;
         for (it = pDataStock->vecAnnounceData.begin();
-            it != pDataStock->vecAnnounceData.end(); )
-        {
-            if (0x0100 != (it->type & 0x0100))
-            {
+            it != pDataStock->vecAnnounceData.end(); ) {
+            if (0x0100 != (it->type & 0x0100)) {
                 it = pDataStock->vecAnnounceData.erase(it);
             }
-            else
-            {
+            else {
                 ++it;
             }
         }

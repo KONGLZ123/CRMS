@@ -195,7 +195,6 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AddPersonDlg.h" />
     <ClInclude Include="AGLinkCtrl.h" />
     <ClInclude Include="AnnounceDlg.h" />
     <ClInclude Include="AssetsHandoverDlg.h" />
@@ -259,7 +258,6 @@
     <ClInclude Include="WorkloadDlg.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="AddPersonDlg.cpp" />
     <ClCompile Include="AGLinkCtrl.cpp" />
     <ClCompile Include="AnnounceDlg.cpp" />
     <ClCompile Include="AssetsHandoverDlg.cpp" />

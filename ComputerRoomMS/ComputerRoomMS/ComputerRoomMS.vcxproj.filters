@@ -31,9 +31,6 @@
     <ClInclude Include="WinThreadNet.h">
       <Filter>Thread</Filter>
     </ClInclude>
-    <ClInclude Include="AddPersonDlg.h">
-      <Filter>UI\Dialog</Filter>
-    </ClInclude>
     <ClInclude Include="AnnounceDlg.h">
       <Filter>UI\Dialog</Filter>
     </ClInclude>
@@ -221,9 +218,6 @@
     </ClCompile>
     <ClCompile Include="WinThreadDatabase.cpp">
       <Filter>Thread</Filter>
-    </ClCompile>
-    <ClCompile Include="AddPersonDlg.cpp">
-      <Filter>UI\Dialog</Filter>
     </ClCompile>
     <ClCompile Include="AGLinkCtrl.cpp">
       <Filter>UI\Ctrl</Filter>

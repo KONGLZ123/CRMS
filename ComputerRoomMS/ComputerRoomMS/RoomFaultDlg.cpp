@@ -78,6 +78,8 @@ void CRoomFaultDlg::OnBnClickedBtnUploadGz()
     pReportData->reportType = REQUEST_REPAIR;
 
     PostThreadMessage(m_pDbThread->m_nThreadID, WM_INSERT_REPORT, (WPARAM)pReportData, 0);
+
+    ::MessageBox(NULL, _T("提交成功"), _T("提示"), MB_OK);
 }
 
 
