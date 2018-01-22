@@ -1018,7 +1018,8 @@ BOOL CWinThreadDatabase::SelectTeacherInfoFromDb(vector<TEACHER_INFO> &vecTeache
                     root["tel"] = NotNull(sqlRow[i]);
                     break;
                 case 4:
-                    root["authority"] = atoi(sqlRow[i]);
+                    if (NULL != sqlRow[i])
+                        root["authority"] = atoi(sqlRow[i]);
                     break;
                 //case 5:
                 //    root["classes_id"] = NotNull(sqlRow[i]);
@@ -1095,7 +1096,8 @@ BOOL CWinThreadDatabase::SelectStudentInfoFromDb(vector<STUDETN_INFO> &vecStuden
                     root["major"] = NotNull(sqlRow[i]);
                     break;
                 case 7:
-                    root["authority"] = atoi(sqlRow[i]);
+                    if (NULL != sqlRow[i])
+                        root["authority"] = atoi(sqlRow[i]);
                     break;
                 default:
                     break;
@@ -1155,10 +1157,12 @@ BOOL CWinThreadDatabase::SelectAttendenceInfoFromDb(vector<ATTENDENCE_INFO>& vec
                     root["teacher_name"] = NotNull(sqlRow[i]);
                     break;
                 case 3:
-                    root["attendece_cnt"] = atoi(sqlRow[i]);
+                    if (NULL != sqlRow[i])
+                        root["attendece_cnt"] = atoi(sqlRow[i]);
                     break;
                 case 4:
-                    root["attendece_score"] = atoi(sqlRow[i]);
+                    if (NULL != sqlRow[i])
+                        root["attendece_score"] = atoi(sqlRow[i]);
                     break;
                 case 5:
                     root["student_name"] = NotNull(sqlRow[i]);
@@ -1212,10 +1216,12 @@ BOOL CWinThreadDatabase::SelectScheduleFromDb(vector<SCHEDULE_DATA>& vecSheduleI
                 switch (i)
                 {
                 case 0:
-                    root["week"] = atoi(sqlRow[i]);
+                    if (NULL != sqlRow[i])
+                        root["week"] = atoi(sqlRow[i]);
                     break;
                 case 1:
-                    root["day"] = atoi(sqlRow[i]);
+                    if (NULL != sqlRow[i])
+                        root["day"] = atoi(sqlRow[i]);
                     break;
                 case 2:
                     root["class_12"] = NotNull(sqlRow[i]);
@@ -1468,16 +1474,15 @@ BOOL CWinThreadDatabase::SelectAnnounceFromDb(vector<ANNOUNCE_DATA> &vecAnnounce
                 switch (i)
                 {
                 case 0:
-                    //announceData.announce_id = (int)*sqlRow[i] - 48;
-                    root["announce_id"] = atoi(sqlRow[i]);
+                    if (NULL != sqlRow[i])
+                        root["announce_id"] = atoi(sqlRow[i]);
                     break;
                 case 1:
-                    //announceData.strText = sqlRow[i];
                     root["strText"] = NotNull(sqlRow[i]);
                     break;
                 case 2:
-                    //announceData.type = (int)*sqlRow[i] - 48;
-                    root["type"] = atoi(sqlRow[i]);
+                    if (NULL != sqlRow[i])
+                        root["type"] = atoi(sqlRow[i]);
                     break;
                 default:
                     break;
@@ -1751,10 +1756,12 @@ BOOL CWinThreadDatabase::SelectWorkloadSalaryInfoFromDb(vector<WORKLOAD_REPORT>&
                     root["reason"] = NotNull(sqlRow[i]);
                     break;
                 case 5:
-                    root["result"] = atoi(sqlRow[i]);
+                    if (NULL != sqlRow[i])
+                        root["result"] = atoi(sqlRow[i]);
                     break;
                 case 6:
-                    root["is_view"] = atoi(sqlRow[i]);
+                    if (NULL != sqlRow[i])
+                        root["is_view"] = atoi(sqlRow[i]);
                     break;
                 default:
                     break;

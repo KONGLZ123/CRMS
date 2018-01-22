@@ -653,7 +653,7 @@ void CLoginDlg::PraseJson(char * buf)
             USES_CONVERSION;
             pWorkload->strName = root["name"].asCString();
             pWorkload->strDate = root["date"].asCString();
-            pWorkload->strWorkloadSalary = root["workload"].asCString();
+            pWorkload->result = root["result"].asInt();
             pWorkload->isView = root["is_view"].asInt();
 
             PostThreadMessage(m_pThreadDatabase->m_nThreadID, WM_UPDATE_SALARY_INFO, (WPARAM)pWorkload, 0);
