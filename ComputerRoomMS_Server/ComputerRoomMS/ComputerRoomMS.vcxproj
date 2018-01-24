@@ -84,8 +84,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>E:\MFC_CODE\ComputerRoomMS\ComputerRoomMS\include;$(IncludePath)</IncludePath>
-    <LibraryPath>E:\MFC_CODE\ComputerRoomMS\ComputerRoomMS;$(LibraryPath)</LibraryPath>
+    <IncludePath>E:\MFC_CODE\ComputerRoomMS\ComputerRoomMS\include;E:\MFC_CODE\ComputerRoomMS\ComputerRoomMS\jsoncpp\include\json;$(IncludePath)</IncludePath>
+    <LibraryPath>E:\MFC_CODE\ComputerRoomMS\ComputerRoomMS\Release;E:\MFC_CODE\ComputerRoomMS\ComputerRoomMS\jsoncpp;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -143,6 +143,8 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>false</SDLCheck>
+      <DebugInformationFormat>None</DebugInformationFormat>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

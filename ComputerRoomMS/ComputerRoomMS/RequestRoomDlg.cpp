@@ -65,7 +65,7 @@ void CRequestRoomDlg::OnBnClickedButton1()
     pReportData->reason = strReason;
     pReportData->uploadDate = strDate;
     pReportData->notes = _T("");
-    pReportData->reportType = REQUEST_ROOM;
+    pReportData->reportType = REQUEST_REPORT;
 
     PostThreadMessage(m_pDbThread->m_nThreadID, WM_INSERT_REPORT, (WPARAM)pReportData, 0);
 

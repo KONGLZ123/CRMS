@@ -75,7 +75,8 @@ void CSetupAdminDlg::OnBnClickedBtnAsetup()
     CString *pStrPwd = new CString(strNewPwd1);
     PostThreadMessage(m_pDbThread->m_nThreadID, WM_ADMIN_SETUP_PWD, (WPARAM)pStrPwd, 0);
 
-    GetDlgItem(IDC_STATIC_ASETUP)->SetWindowText(_T("修改成功！"));
+    ::MessageBox(NULL, _T("修改成功"), _T("提示"), MB_OK);
+    //GetDlgItem(IDC_STATIC_ASETUP)->SetWindowText(_T("修改成功！"));
 }
 
 void CSetupAdminDlg::SetAdminInfo(SYSADMIN_INFO & sysAdminInfo)

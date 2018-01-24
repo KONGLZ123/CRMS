@@ -58,7 +58,7 @@ void CRequestRoomDlg::OnBnClickedButton1()
     pReportData->reason = strReason;
     pReportData->uploadDate = strTime;
     pReportData->notes = _T("");
-    pReportData->reportType = REQUEST_REPAIR;
+    pReportData->reportType = REQUEST_REPORT;
 
     PostThreadMessage(m_pDbThread->m_nThreadID, WM_REQUEST_REPAIR, (WPARAM)pReportData, 0);
 }
