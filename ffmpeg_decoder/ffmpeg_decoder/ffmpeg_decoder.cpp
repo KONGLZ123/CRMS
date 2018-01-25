@@ -2,6 +2,7 @@
 //
 
 #include "stdafx.h"
+#include <stdio.h>
 
 #define __STDC_CONSTANT_MACROS
 
@@ -32,13 +33,20 @@ int main()
         return -1;
     }
 
-    printf("duration: %lld\n", formatCtx->duration);
-    printf("bit_rate: %d\n", formatCtx->bit_rate);
-    printf("filename: %s\n", formatCtx->filename);
-    printf("nb_stream: %d\n", formatCtx->nb_streams);
-    printf("extensions: %s\n", formatCtx->iformat->extensions);
-    printf("name: %s\n", formatCtx->iformat->name);
-    printf("long_name: %s\n", formatCtx->iformat->long_name);
+    FILE *fileTxt = NULL;
+    fopen_s(&fileTxt, "output.txt", "wb+");
+    if (NULL == fileTxt) {
+        printf("Couldn't access outpur.yuv\n");
+        return -1;
+    }
+    fprintf(fileTxt, "封装格式: %s\n", formatCtx->iformat->name);
+    fprintf(fileTxt, "码率: %d\n", formatCtx->bit_rate);
+    fprintf(fileTxt, "时长: %lld\n", formatCtx->duration);
+    
+    //printf("filename: %s\n", formatCtx->filename);
+    //printf("nb_stream: %d\n", formatCtx->nb_streams);
+    //printf("extensions: %s\n", formatCtx->iformat->extensions);
+    //printf("long_name: %s\n", formatCtx->iformat->long_name);
 
     // 找到视频流序号
     int videoIndex = -1;
@@ -65,9 +73,11 @@ int main()
         printf("Could not open codec\n");
         return -1;
     }
-    
-    // 将数据流量
-    printf("bit_rate: %d\n", codecCtx->bit_rate);
+
+    fprintf(fileTxt, "编码方式: %s\n", codec->name);
+    fprintf(fileTxt, "宽: %d\n", codecCtx->width);
+    fprintf(fileTxt, "高: %d\n", codecCtx->height);
+
     printf("width: %d\n", codecCtx->width);
     printf("height: %d\n", codecCtx->height);
     printf("name: %s\n", codec->name);
@@ -99,8 +109,24 @@ int main()
     int gotPicture = 0;
     int ret = -1;
     // 读取压缩视频帧
+    FILE *fileH264;
+    fopen_s(&fileH264, "output.h264", "wb+");
+    if (NULL == fileH264) {
+        printf("Couldn't access output.h264\n");
+        return - 1;
+    }
+    FILE *fileYuv = NULL;
+    fopen_s(&fileYuv, "output.yuv", "wb+");
+    if (NULL == fileYuv) {
+        printf("Couldn't access outpur.yuv\n");
+        return -1;
+    }
+
     while (av_read_frame(formatCtx, packet) >= 0) {
         if (packet->stream_index == videoIndex) {
+            
+            fwrite(packet->data, 1, packet->size, fileH264);
+            
             // 压缩视频帧 转换为 像素视频帧
             ret = avcodec_decode_video2(codecCtx, frame, &gotPicture, packet);
             if (ret < 0) {
@@ -110,12 +136,25 @@ int main()
             if (gotPicture) {
                 sws_scale(img2ctx, frame->data, frame->linesize, 0, codecCtx->height,
                     frameYuv->data, frameYuv->linesize);
+                
+                // 分别写YUV, uv的都是y的1/4， u的宽是y的一半，v的高是y的一半。
+                fwrite(frameYuv->data[0], 1, codecCtx->width * codecCtx->height, fileYuv);
+                fwrite(frameYuv->data[1], 1, codecCtx->width * codecCtx->height / 4, fileYuv);
+                fwrite(frameYuv->data[2], 1, codecCtx->width * codecCtx->height / 4, fileYuv);
+
                 printf("Decoded frame index: %d\n", frameCnt);
                 frameCnt++;
+
+                //fprintf(fileTxt, "帧大小: %s\n", );
+                fprintf(fileTxt, "帧类型: %d\n", frame->pict_type);
             }
         }
         av_free_packet(packet);
     }
+
+    fclose(fileH264);
+    fclose(fileYuv);
+    fclose(fileTxt);
 
     av_free_packet(packet);
     av_free(outBuffer);
