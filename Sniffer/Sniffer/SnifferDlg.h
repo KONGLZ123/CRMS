@@ -69,4 +69,6 @@ public:
     void ShowPckNum();
     afx_msg void OnStart();
     afx_msg void OnStop();
+    afx_msg void OnHdnItemchangedList1(NMHDR *pNMHDR, LRESULT *pResult);
+    afx_msg void OnLvnItemchangedList1(NMHDR *pNMHDR, LRESULT *pResult);
 };

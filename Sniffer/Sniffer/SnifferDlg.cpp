@@ -250,6 +250,8 @@ BEGIN_MESSAGE_MAP(CSnifferDlg, CDialogEx)
     ON_COMMAND(ID_FILTER, &CSnifferDlg::OnFilter)
     ON_COMMAND(ID_START, &CSnifferDlg::OnStart)
     ON_COMMAND(ID_STOP, &CSnifferDlg::OnStop)
+    ON_NOTIFY(HDN_ITEMCHANGED, IDC_LIST1, &CSnifferDlg::OnHdnItemchangedList1)
+    ON_NOTIFY(LVN_ITEMCHANGED, IDC_LIST1, &CSnifferDlg::OnLvnItemchangedList1)
 END_MESSAGE_MAP()
 
 
@@ -394,12 +396,12 @@ void CSnifferDlg::ShowPacketList(pcap_pkthdr * pkt_header, const u_char * pkt_da
     nCount = m_list1.InsertItem(nIndex, str, 0);
 
     /*显示时间*/
-    struct tm *ltime = NULL;
+    struct tm ltime;
     time_t local_tv_sec;
     local_tv_sec = pkt_header->ts.tv_sec;
     //ltime = localtime(&local_tv_sec);
-    localtime_s(ltime, &local_tv_sec);
-    str.Format(_T("%d:%d:%d.%.6d"), ltime->tm_hour, ltime->tm_min, ltime->tm_sec, pkt_header->ts.tv_usec);
+    localtime_s(&ltime, &local_tv_sec);
+    str.Format(_T("%d:%d:%d.%.6d"), ltime.tm_hour, ltime.tm_min, ltime.tm_sec, pkt_header->ts.tv_usec);
     m_list1.SetItemText(nCount, 1, str);
     /*处理链路层*/
     ethernet_header *eh;
@@ -750,4 +752,31 @@ void CSnifferDlg::OnStart()
 void CSnifferDlg::OnStop()
 {
     m_bFlag = false;
+}
+
+
+void CSnifferDlg::OnHdnItemchangedList1(NMHDR *pNMHDR, LRESULT *pResult)
+{
+    LPNMHEADER phdr = reinterpret_cast<LPNMHEADER>(pNMHDR);
+    // TODO: 在此添加控件通知处理程序代码
+    *pResult = 0;
+
+
+}
+
+
+void CSnifferDlg::OnLvnItemchangedList1(NMHDR *pNMHDR, LRESULT *pResult)
+{
+    LPNMLISTVIEW pNMLV = reinterpret_cast<LPNMLISTVIEW>(pNMHDR);
+    // TODO: 在此添加控件通知处理程序代码
+    *pResult = 0;
+
+    POSITION pos = m_list1.GetFirstSelectedItemPosition();
+    if (pos == NULL)
+        return;
+
+    long index = m_list1.GetNextSelectedItem(pos);
+    if (index < 0)
+        return;
+    ShowPacketTree(m_pktHeaders.GetAt(index), m_pktDatas.GetAt(index), index);
 }
