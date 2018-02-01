@@ -733,9 +733,6 @@ void CSnifferDlg::ShowPckNum()
 }
 
 
-
-
-
 void CSnifferDlg::OnStart()
 {
     if (m_pDevice == NULL)

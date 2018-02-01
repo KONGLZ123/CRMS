@@ -1,3 +1,4 @@
-﻿  video_play.cpp
+﻿  stdafx.cpp
+  video_play.cpp
   video_play.vcxproj -> E:\MFC_CODE\ComputerRoomMS\video_play\Debug\video_play.exe
   video_play.vcxproj -> E:\MFC_CODE\ComputerRoomMS\video_play\Debug\video_play.pdb (Full PDB)
