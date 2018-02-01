@@ -1,0 +1,8 @@
+﻿  stdafx.cpp
+c:\software\vs2015\vc\atlmfc\include\afx.h(38): warning C4996: 'MBCS_Support_Deprecated_In_MFC': MBCS support in MFC is deprecated and may be removed in a future version of MFC.
+  c:\software\vs2015\vc\atlmfc\include\afx.h(33): note: 参见“MBCS_Support_Deprecated_In_MFC”的声明
+  testplayDlg.cpp
+  testplay.cpp
+  正在生成代码...
+  testplay.vcxproj -> E:\MFC_CODE\ComputerRoomMS\testplay\Debug\testplay.exe
+  testplay.vcxproj -> E:\MFC_CODE\ComputerRoomMS\testplay\Debug\testplay.pdb (Partial PDB)

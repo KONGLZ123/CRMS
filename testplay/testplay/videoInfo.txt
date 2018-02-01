@@ -1,0 +1,6 @@
+文件名: Titanic.ts
+时长: 47984611
+码率: 589945
+扩展名: (null)
+封装格式: mpegts
+封装格式（完整）: MPEG-TS (MPEG-2 Transport Stream)
