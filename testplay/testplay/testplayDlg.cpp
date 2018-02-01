@@ -175,10 +175,14 @@ HCURSOR CtestplayDlg::OnQueryDragIcon()
 
 
 int exitCode = 0;
+int threadPause = 0;
 int VideoShowThread(void *data)
 {
     SDL_Event event;
     while (!exitCode) {
+        if (threadPause)
+            continue;
+
         event.type = DISPLAY_VIDEO;
         SDL_PushEvent(&event);
         SDL_Delay(40);
@@ -300,6 +304,11 @@ UINT ffmpegPlayer(LPVOID lpParam)
             }
             av_free_packet(packet);
         }
+        else if (event.type == SDL_KEYDOWN) {
+            if (event.key.keysym.sym == SDLK_SPACE) {
+                threadPause = !threadPause;
+            }
+        }
         else if (event.type == SDL_QUIT) {
             exitCode = 1;
         }
@@ -325,7 +334,7 @@ void CtestplayDlg::OnBnClickedBtnPlay()
 
 void CtestplayDlg::OnBnClickedBtnStop()
 {
-
+    threadPause = !threadPause;
 }
 
 
