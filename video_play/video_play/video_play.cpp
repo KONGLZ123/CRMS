@@ -95,6 +95,7 @@ int main()
 
     AVFrame *frame = av_frame_alloc();
     AVFrame *frameYuv = av_frame_alloc();
+
     uint8_t *outBuffer = (uint8_t *)malloc(avpicture_get_size(PIX_FMT_YUV420P, codecCtx->width, codecCtx->height));
     avpicture_fill((AVPicture *)frameYuv, outBuffer, PIX_FMT_YUV420P, codecCtx->width, codecCtx->height);
 
@@ -104,6 +105,7 @@ int main()
 
     // 创建显示窗口
     SDL_Init(SDL_INIT_VIDEO);
+
     int screenWidth = codecCtx->width;
     int screenHeight = codecCtx->height;
     SDL_Window *sdlWnd = SDL_CreateWindow("DisplayVideoDemo", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
