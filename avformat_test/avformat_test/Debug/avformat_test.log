@@ -1,1 +1,4 @@
-﻿
+﻿  avformat_test.cpp
+e:\mfc_code\computerroomms\avformat_test\avformat_test\avformat_test.cpp(26): warning C4018: “>”: 有符号/无符号不匹配
+  avformat_test.vcxproj -> E:\MFC_CODE\ComputerRoomMS\avformat_test\Debug\avformat_test.exe
+  avformat_test.vcxproj -> E:\MFC_CODE\ComputerRoomMS\avformat_test\Debug\avformat_test.pdb (Full PDB)

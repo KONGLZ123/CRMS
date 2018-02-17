@@ -96,8 +96,6 @@ int main(int argc, char *argv[])
 
 
 
-
-
 #if 0
 struct buffer_data {
     uint8_t *ptr;
