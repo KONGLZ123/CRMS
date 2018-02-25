@@ -14,6 +14,7 @@ extern "C"
 #include <libavutil/opt.h>
 };
 
+
 AVFormatContext *formatCtx = NULL;
 AVCodecContext *decCtx = NULL;
 static int videoStreamIndex = -1;
@@ -53,6 +54,16 @@ static int open_input_file(const char *filename)
     }
 
     return 0;
+}
+
+static int init_filters(const char *filters_descr)
+{
+    const AVFilter *buferSrc = avfilter_get_by_name("buffer");
+    const AVFilter *bufferSink = avfilter_get_by_name("buffersink");
+    AVFilterInOut *outputs = avfilter_inout_alloc();
+    AVFilterInOut *inputs = avfilter_inout_alloc();
+    AVRational timeBase = formatCtx->streams[videoStreamIndex]->time_base;
+
 }
 
 int main()

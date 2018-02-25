@@ -1,1 +1,2 @@
-﻿
+﻿  filtering_video.cpp
+e:\mfc_code\computerroomms\filtering_video\filtering_video\filtering_video.cpp(86): error C2065: “filter_descr”: 未声明的标识符

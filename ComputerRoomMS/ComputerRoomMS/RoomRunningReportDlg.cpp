@@ -56,9 +56,6 @@ void CRoomRunningReportDlg::OnBnClickedButton1()
         return;
     }
 
-    //CTime tm = CTime::GetCurrentTime();
-    //CString strTime = tm.Format(_T("%Y-%m-%d %H:%M:%S"));
-
     REPORT_DATA *pReportData = new REPORT_DATA;
     pReportData->submitPerson = strName;
     pReportData->roomId = strRoomNum;
