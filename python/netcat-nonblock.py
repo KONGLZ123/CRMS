@@ -10,6 +10,14 @@ def setNonBlocking(fd):
     flags = fcntl.fcntl(fd, fcntl.F_GETFL)
     fcntl.fcntl(fd, fcntl.F_SETFL, flags | os.O_NONBLOCK)
 
+def nonBlockingWrite(fd, data):
+    try:
+        nw = os.write(fd, data)
+        return nw
+    except OSError as e:
+        if e.errno == errno.EWOULDBLOCK:
+            return -1
+
 
 def relay(sock):
     socketEvents = select.POLLIN
@@ -25,9 +33,36 @@ def relay(sock):
     socketOutputBuffer = ''
     while not done:
         events = poll.poll(10000) # 10 second
-        for fileno & select.POLLIN:
-            if fileno = sock.fileno():
-                
+        for fileno, event in events:
+            if event & select.POLLIN:
+                if fileno == sock.fileno():
+                    data = os.read(fileno, 8192)
+                    if data:
+                        assert len(socketOutputBuffer) == 0
+                        nw = nonBlockingWrite(sock.fileno(), data)
+                        if nw < len(data):
+                            if nw < 0:
+                                nw = 0
+                            socketOutputBuffer = data[nw:]
+                            socketEvents |= select.POLLOUT
+                            poll.register(sock, socketEvents)
+                            poll.unregiseter(sys.stdin)
+                    else:
+                        sock.shutdown(socket.SHUT_WR)
+                        poll.unregiseter(sys.stdin)
+            if event & select.POLLOUT:
+                if fileno == sock.fileno():
+                    assert len(socketOutputBuffer) > 0
+                    nw = nonBlockingWrite(sock.fileno(), socketOutputBuffer)
+                    if nw < len(socketOutputBuffer):
+                        assert nw > 0
+                        socketOutputBuffer = socketOutputBuffer[nw:]
+                    else:
+                        socketOutputBuffer = ''
+                        socketEvents &= ~select.POLLOUT
+                        poll.register(sock, socketEvents)
+                        poll.register(sys.stdin, select.POLLIN)
+
 
 def main(argv):
     if len(argv) < 3:
