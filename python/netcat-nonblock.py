@@ -75,14 +75,14 @@ def main(argv):
         # server
         server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         server_socket = socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        server_socket.bind('', port)
+        server_socket.bind(('', port))
         server_socket.listen(5)
         (client_socket, client_address) = server_socket.accept()
         server_socket.close()
         relay(client_socket)
     else:
         # client
-        sock = socket.create_connection(argv[1], port)
+        sock = socket.create_connection((argv[1], port))
         relay(sock)
 
 if __name__ == "__main__":
