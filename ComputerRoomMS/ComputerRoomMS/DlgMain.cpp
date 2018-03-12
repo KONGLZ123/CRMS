@@ -217,6 +217,7 @@ void CDlgMain::InitData(int role)
         btnInfo.strName = _T("机房资产清单");
         m_roomManagerDlg.Create(CAssetsListDlg::IDD, this);
         m_roomManagerDlg.MoveWindow(150, 0, rcClient.Width() - 150, rcClient.Height(), TRUE);
+        m_roomManagerDlg.SetThreadDatabase(m_pDbThread);
         btnInfo.pDlg = &m_roomManagerDlg;
         m_vecBtnInfo.push_back(btnInfo);
 

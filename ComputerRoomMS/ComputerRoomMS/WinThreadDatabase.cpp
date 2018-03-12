@@ -46,6 +46,7 @@ BEGIN_MESSAGE_MAP(CWinThreadDatabase, CWinThread)
     ON_THREAD_MESSAGE(WM_UPDATE_ROOM_REQUEST, OnUpdateRoomRequest)
     ON_THREAD_MESSAGE(WM_UPDATE_EXAM_INFO, OnUpdateExamInfo)
     ON_THREAD_MESSAGE(WM_UPDATE_SALARY_INFO, OnUpdateSalaryInfo)
+    ON_THREAD_MESSAGE(WM_UPDATE_ASSERT_LIST_ITEM, OnUpdateAssertList)
 END_MESSAGE_MAP()
 
 BOOL CWinThreadDatabase::InitInstance()
@@ -442,6 +443,26 @@ void CWinThreadDatabase::OnUpdateSalaryInfo(WPARAM wParam, LPARAM lParam)
 
     delete pWorkload;
     pWorkload = NULL;
+}
+
+void CWinThreadDatabase::OnUpdateAssertList(WPARAM wParam, LPARAM lParam)
+{
+    ASSERT_DATA *pAssertData = reinterpret_cast<ASSERT_DATA *>(wParam);
+
+    Json::Value root;
+
+    USES_CONVERSION;
+    root["code"] = S_CODE_UPDATE_ASSERT_LIST;
+    root["room_num"] = W2A(pAssertData->strRoomNum);
+    root["data"] = W2A(pAssertData->strOutDate);
+    root["reason"] = W2A(pAssertData->strReason);
+    root["owner"] = W2A(pAssertData->strOwner);
+    root["indata"] = W2A(pAssertData->strInDate);
+
+    SendMsgToServer(root);
+
+    delete pAssertData;
+    pAssertData = NULL;
 }
 
 BOOL CWinThreadDatabase::GetLoginData(LOGIN_REQUEST *ptagLoginRequest)

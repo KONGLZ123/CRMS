@@ -53,26 +53,26 @@ END_MESSAGE_MAP()
 // 提交报告
 void CAssetsHandoverDlg::OnBnClickedButton4()
 {
-    CString strDeviceName;
-    CString strOwner;
+    //CString strDeviceName;
+    CString strManager;
     CString strRoomNum;
-    CString strInDate;
+    CString strRecv;
     CString strOutDate;
     CString strReason;
-    CString strStatus;
+    //CString strStatus;
 
-    GetDlgItem(IDC_EDIT_DEVICE_NAME)->GetWindowText(strDeviceName);
-    GetDlgItem(IDC_EDIT_OWNER)->GetWindowText(strOwner);
+    //GetDlgItem(IDC_EDIT_DEVICE_NAME)->GetWindowText(strDeviceName);
+    GetDlgItem(IDC_EDIT_OWNER)->GetWindowText(strManager);
     GetDlgItem(IDC_EDIT_ROOM_NUM)->GetWindowText(strRoomNum);
-    GetDlgItem(IDC_EDIT_IN_DATE)->GetWindowText(strInDate);
+    GetDlgItem(IDC_EDIT_IN_DATE)->GetWindowText(strRecv);
     GetDlgItem(IDC_EDIT_OUT_DATE)->GetWindowText(strOutDate);
-    GetDlgItem(IDC_EDIT_STATUS)->GetWindowText(strStatus);
+    //GetDlgItem(IDC_EDIT_STATUS)->GetWindowText(strStatus);
     GetDlgItem(IDC_EDIT_REASON11)->GetWindowText(strReason);
 
-    if (strDeviceName.IsEmpty() ||
-        strOwner.IsEmpty() ||
+    if (//strDeviceName.IsEmpty() ||
+        strManager.IsEmpty() ||
         strRoomNum.IsEmpty() ||
-        strInDate.IsEmpty() ||
+        strRecv.IsEmpty() ||
         strOutDate.IsEmpty() ||
         strReason.IsEmpty())
     {
@@ -81,12 +81,12 @@ void CAssetsHandoverDlg::OnBnClickedButton4()
     }
 
     ASSERT_DATA *pReportData = new ASSERT_DATA;
-    pReportData->strDeviceName = strDeviceName;
-    pReportData->strOwner = strOwner;
+    //pReportData->strDeviceName = strDeviceName;
+    pReportData->strOwner = strManager;
     pReportData->strRoomNum = strRoomNum;
-    pReportData->strInDate = strInDate;
+    pReportData->strInDate = strRecv;
     pReportData->strOutDate = strOutDate;
-    pReportData->strStatus = strStatus;
+    //pReportData->strStatus = strStatus;
     pReportData->strReason = strReason;
 
     PostThreadMessage(m_pDbThread->m_nThreadID, WM_INSERT_ASSERT_DATA, (WPARAM)pReportData, 0);
@@ -189,26 +189,26 @@ void CAssetsHandoverDlg::OnBnClickedBtnPrinter()
 
 void CAssetsHandoverDlg::OnBnClickedBtnExportWord()
 {
-    CString strDeviceName;
-    CString strOwner;
+    //CString strDeviceName;
+    CString strManager;
     CString strRoomNum;
-    CString strInDate;
+    CString strRecv;
     CString strOutDate;
     CString strReason;
-    CString strStatus;
+    //CString strStatus;
 
-    GetDlgItem(IDC_EDIT_DEVICE_NAME)->GetWindowText(strDeviceName);
-    GetDlgItem(IDC_EDIT_OWNER)->GetWindowText(strOwner);
+    //GetDlgItem(IDC_EDIT_DEVICE_NAME)->GetWindowText(strDeviceName);
+    GetDlgItem(IDC_EDIT_OWNER)->GetWindowText(strManager);
     GetDlgItem(IDC_EDIT_ROOM_NUM)->GetWindowText(strRoomNum);
-    GetDlgItem(IDC_EDIT_IN_DATE)->GetWindowText(strInDate);
+    GetDlgItem(IDC_EDIT_IN_DATE)->GetWindowText(strRecv);
     GetDlgItem(IDC_EDIT_OUT_DATE)->GetWindowText(strOutDate);
-    GetDlgItem(IDC_EDIT_STATUS)->GetWindowText(strStatus);
+    //GetDlgItem(IDC_EDIT_STATUS)->GetWindowText(strStatus);
     GetDlgItem(IDC_EDIT_REASON11)->GetWindowText(strReason);
 
-    if (strDeviceName.IsEmpty() ||
-        strOwner.IsEmpty() ||
+    if (//strDeviceName.IsEmpty() ||
+        strManager.IsEmpty() ||
         strRoomNum.IsEmpty() ||
-        strInDate.IsEmpty() ||
+        strRecv.IsEmpty() ||
         strOutDate.IsEmpty() ||
         strReason.IsEmpty())
     {
@@ -251,29 +251,29 @@ void CAssetsHandoverDlg::OnBnClickedBtnExportWord()
     docx = docs.Add(dot, covOptional, covOptional, covOptional);
     bookmarks = docx.get_Bookmarks();
 
-    bookmark = bookmarks.Item(&_variant_t(_T("设备名称")));
-    range = bookmark.get_Range();
-    range.put_Text(strDeviceName);
+    //bookmark = bookmarks.Item(&_variant_t(_T("设备名称")));
+    //range = bookmark.get_Range();
+    //range.put_Text(strDeviceName);
 
-    bookmark = bookmarks.Item(&_variant_t(_T("持有者")));
+    bookmark = bookmarks.Item(&_variant_t(_T("管理员")));
     range = bookmark.get_Range();
-    range.put_Text(strOwner);
+    range.put_Text(strManager);
 
-    bookmark = bookmarks.Item(&_variant_t(_T("所属机房")));
+    bookmark = bookmarks.Item(&_variant_t(_T("机房号")));
     range = bookmark.get_Range();
     range.put_Text(strRoomNum);
 
-    bookmark = bookmarks.Item(&_variant_t(_T("入库时间")));
+    bookmark = bookmarks.Item(&_variant_t(_T("接收人")));
     range = bookmark.get_Range();
-    range.put_Text(strInDate);
+    range.put_Text(strRecv);
 
-    bookmark = bookmarks.Item(&_variant_t(_T("出库时间")));
+    bookmark = bookmarks.Item(&_variant_t(_T("时间")));
     range = bookmark.get_Range();
     range.put_Text(strOutDate);
 
-    bookmark = bookmarks.Item(&_variant_t(_T("现状")));
-    range = bookmark.get_Range();
-    range.put_Text(strStatus);
+    //bookmark = bookmarks.Item(&_variant_t(_T("现状")));
+    //range = bookmark.get_Range();
+    //range.put_Text(strStatus);
 
     bookmark = bookmarks.Item(&_variant_t(_T("其他说明")));
     range = bookmark.get_Range();

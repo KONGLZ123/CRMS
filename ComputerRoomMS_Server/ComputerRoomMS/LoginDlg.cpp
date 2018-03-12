@@ -665,6 +665,18 @@ void CLoginDlg::PraseJson(char * buf)
             PostThreadMessage(m_pThreadDatabase->m_nThreadID, WM_DEL_ANNOUNCE, (WPARAM)index, 0);
             break;
         }
+        case S_CODE_UPDATE_ASSERT_LIST: {
+            ASSERT_DATA *pAssertData = new ASSERT_DATA;
+
+            pAssertData->strRoomNum = root["room_num"].asCString();
+            pAssertData->strOutDate = root["data"].asCString();
+            pAssertData->strReason = root["reason"].asCString();
+            pAssertData->strOwner = root["owner"].asCString();
+            pAssertData->strInDate = root["indata"].asCString();
+
+            PostThreadMessage(m_pThreadDatabase->m_nThreadID, WM_UPDATE_ASSERT_LIST_ITEM, (WPARAM)pAssertData, 0);
+            break;
+        }
         default:
             break;
         }

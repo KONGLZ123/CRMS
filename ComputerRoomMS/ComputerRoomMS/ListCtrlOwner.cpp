@@ -221,6 +221,30 @@ void CListCtrlOwner::OnLButtonDown(UINT nFlags, CPoint point)
         }
         m_Col = m_Row = -1;
     }
+    else if (LIST_STYLE_ASSERT_LIST == m_style) {
+        if (m_EditItem.m_hWnd != NULL)
+        {
+            m_EditItem.ShowWindow(0);
+            if (m_Row != -1)
+            {
+                CString ItemText;
+                m_EditItem.GetWindowText(ItemText);
+
+                ASSERT_DATA *pAssertData = new ASSERT_DATA;
+
+                this->SetItemText(m_Row, m_Col, ItemText);
+                pAssertData->strRoomNum = this->GetItemText(m_Row, 1);
+                pAssertData->strOutDate = this->GetItemText(m_Row, 3);
+                pAssertData->strReason = this->GetItemText(m_Row, 2);
+                pAssertData->strOwner = this->GetItemText(m_Row, 4);
+                pAssertData->strInDate = this->GetItemText(m_Row, 5);
+
+                //::SendMessage(this->GetParent()->m_hWnd, WM_UPDATE_ASSERT_LIST_ITEM, (WPARAM)pAssertData, 0);
+                PostThreadMessage(m_pDbThread->m_nThreadID, WM_UPDATE_ASSERT_LIST_ITEM, (WPARAM)pAssertData, 0);
+            }
+        }
+        m_Col = m_Row = -1;
+    }
 
     CListCtrl::OnLButtonDown(nFlags, point);
 }
@@ -378,6 +402,34 @@ void CListCtrlOwner::OnLButtonDblClk(UINT nFlags, CPoint point)
             }
         }
     }
+    else if (LIST_STYLE_ASSERT_LIST == m_style) {
+        LVHITTESTINFO hi;
+        hi.pt = point;
+
+        if (SubItemHitTest(&hi) != -1) {
+            m_Row = hi.iItem;
+            m_Col = hi.iSubItem;
+
+            if (0 == m_Col || 1 == m_Col || 3 == m_Col) {
+                MessageBox(_T("此列不可更改"));
+                return;
+            }
+
+            if (m_EditItem.m_hWnd == NULL) {
+                RECT rect;
+                rect.left = rect.top = 0;
+                rect.bottom = 20;
+                rect.right = 100;
+                m_EditItem.Create(WS_CHILD | ES_LEFT | WS_BORDER | ES_AUTOHSCROLL | ES_WANTRETURN | ES_MULTILINE, rect, this, 1001);
+                m_EditItem.SetFont(this->GetFont(), FALSE);
+            }
+            CRect rect;
+            GetSubItemRect(hi.iItem, hi.iSubItem, LVIR_BOUNDS, rect);
+            m_EditItem.SetWindowText(this->GetItemText(hi.iItem, hi.iSubItem));
+            m_EditItem.MoveWindow(&rect, TRUE);
+            m_EditItem.ShowWindow(1);
+        }
+    }
 
     CListCtrl::OnLButtonDblClk(nFlags, point);
 }
@@ -402,6 +454,21 @@ void CListCtrlOwner::OnMenuClicked()
             }
         }
     }
+    //else if (LIST_STYLE_ASSERT_LIST == m_style) {
+    //    if (-1 != m_delItem) {
+    //        if (IDOK == ::MessageBox(NULL, _T("您确定要删除当前信息吗？"), _T("提示"), MB_OKCANCEL)) {
+    //            PERSON_INFO_PART *pPersonInfo = new PERSON_INFO_PART;
+    //            pPersonInfo->account = this->GetItemText(m_delItem, 1);
+    //            USES_CONVERSION;
+    //            pPersonInfo->authority = atoi(W2A(this->GetItemText(m_delItem, 5)));
+    //            ::SendMessage(this->GetParent()->m_hWnd, WM_DEL_LIST_ITEM, (WPARAM)pPersonInfo, 0);
+    //            PostThreadMessage(m_pDbThread->m_nThreadID, WM_DEL_PERSON_INFO, (WPARAM)pPersonInfo, 0);
+
+    //            DeleteItem(m_delItem);
+    //            m_delItem = -1;
+    //        }
+    //    }
+    //}
 }
 
 

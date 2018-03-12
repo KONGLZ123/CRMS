@@ -55,6 +55,7 @@ private:
     void OnUpdateRoomRequest(WPARAM wParam, LPARAM lParam);
     void OnUpdateSalaryInfo(WPARAM wParam, LPARAM lParam);
     void OnUpdateExamInfo(WPARAM wParam, LPARAM lParam);
+    void OnUpdateAssertList(WPARAM wParam, LPARAM lParam);
 
     BOOL GetLoginData(LOGIN_REQUEST *ptagLoginRequest);
     void CheckPwd(LOGIN_REQUEST *ptagLoginRequest);

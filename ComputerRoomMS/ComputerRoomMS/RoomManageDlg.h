@@ -18,12 +18,17 @@ public:
 
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV Ö§³Ö
-
-	DECLARE_MESSAGE_MAP()
-public:
     virtual BOOL OnInitDialog();
-    CListCtrlOwner m_listRoomAssets;
-    void SetAssertDate(vector<ASSERT_DATA> & vecAssertData);
-    vector<ASSERT_DATA>     m_vecAssertData;
     virtual BOOL PreTranslateMessage(MSG* pMsg);
+    afx_msg void OnBnClickedButton4();
+	DECLARE_MESSAGE_MAP()
+
+public:
+    void SetThreadDatabase(CWinThreadDatabase *pDbThread);
+    void SetAssertDate(vector<ASSERT_DATA> & vecAssertData);
+
+private:
+    CWinThreadDatabase *    m_pDbThread;
+    vector<ASSERT_DATA>     m_vecAssertData;
+    CListCtrlOwner          m_listRoomAssets;
 };

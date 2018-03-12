@@ -87,8 +87,6 @@ void CRequestRoomDlg::SetThreadDatabase(CWinThreadDatabase * pDbThread)
     m_pDbThread = pDbThread;
 }
 
-
-
 BOOL CRequestRoomDlg::PreTranslateMessage(MSG* pMsg)
 {
     if (pMsg->message == WM_KEYDOWN)

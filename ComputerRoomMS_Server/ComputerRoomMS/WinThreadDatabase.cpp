@@ -99,6 +99,7 @@ BEGIN_MESSAGE_MAP(CWinThreadDatabase, CWinThread)
     ON_THREAD_MESSAGE(WM_UPDATE_SALARY_INFO, OnUpdateSalaryInfo)
     ON_THREAD_MESSAGE(WM_ADD_PERSON, OnAddPerson)
     ON_THREAD_MESSAGE(WM_UPDATE_EXAM_INFO, OnUpdateExamInfo)
+    ON_THREAD_MESSAGE(WM_UPDATE_ASSERT_LIST_ITEM, OnUpdateAssertList)
 END_MESSAGE_MAP()
 
 BOOL CWinThreadDatabase::InitInstance()
@@ -674,6 +675,32 @@ void CWinThreadDatabase::OnUpdateExamInfo(WPARAM wParam, LPARAM lParam)
 
     delete pStuInfo;
     pStuInfo = NULL;
+}
+
+void CWinThreadDatabase::OnUpdateAssertList(WPARAM wParam, LPARAM lParam)
+{
+    ASSERT_DATA *pAssertData = reinterpret_cast<ASSERT_DATA *>(wParam);
+
+    USES_CONVERSION;
+    char *pRoomNum = W2A(pAssertData->strRoomNum);
+    char *pOutData = W2A(pAssertData->strOutDate);
+    char *pReason = W2A(pAssertData->strReason);
+    char *pOwner = W2A(pAssertData->strOwner);
+    char *pDate = W2A(pAssertData->strInDate);
+
+    char szTemp[200];
+    sprintf(szTemp, "UPDATE t_assert_handover_report SET device_owner = '%s', in_repo = '%s', notes = '%s' WHERE room_num = '%s' AND out_repo = '%s'", 
+        pOwner, pDate, pReason, pRoomNum, pOutData);
+    int res = mysql_real_query(&m_mysql, szTemp, (unsigned long)strlen(szTemp));//≤Â»Î ˝æ›
+    if (0 != res)
+    {
+        SendMsgToDlg(_T("OnUpdateAssertList faied£°"));
+        //return FALSE;
+    };
+
+    delete pAssertData;
+    pAssertData = NULL;
+
 }
 
 BOOL CWinThreadDatabase::GetLoginData(LOGIN_REQUEST *ptagLoginRequest)
