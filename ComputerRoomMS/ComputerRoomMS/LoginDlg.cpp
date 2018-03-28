@@ -18,6 +18,7 @@
 #endif
 
 // CComputerRoomMSDlg ¶Ô»°¿ò
+  
 
 
 CLoginDlg::CLoginDlg(CWnd* pParent /*=NULL*/)
