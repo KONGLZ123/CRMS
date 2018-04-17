@@ -73,7 +73,7 @@ public:
     virtual bool run() = 0;
     virtual bool sendMessage(AgoraIpcMsg msg, char *payload, unsigned int len) = 0;
 
-private:
+protected:
     AgoraIpcListener *m_listener;
 };
 

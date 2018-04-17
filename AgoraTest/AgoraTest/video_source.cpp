@@ -42,7 +42,7 @@ bool AgoraVideoSource::initialize()
     if (!m_ipc->connect()) {
         LOG_ERROR("%s, ipc connect fail.\n", __FUNCTION__);
         LOG_LEAVE;
-        //return false;
+        return false;
     }
 
     m_rtcEngine.reset(createAgoraRtcEngine());
@@ -107,9 +107,10 @@ void AgoraVideoSource::run()
     }
 
     m_process->Monitor([this](INodeProcess *) {
-        LOG_WARNING("%s, remote process ext.\n", __FUNCTION__);
+        LOG_WARNNING("%s, remote process ext.\n", __FUNCTION__);
         this->exit(false);
     });
+    m_ipc->run();
 
     LOG_LEAVE;
 }
