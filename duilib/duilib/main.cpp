@@ -143,6 +143,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCm
     if (FAILED(hr))
         return 0;
 
+
     CDuiFrameWnd duiFrame;
     duiFrame.Create(NULL, _T("Ö÷¿ò¼Ü´°¿Ú"), UI_WNDSTYLE_FRAME, WS_EX_WINDOWEDGE);
     duiFrame.CenterWindow();
