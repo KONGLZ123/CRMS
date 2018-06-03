@@ -98,7 +98,7 @@ public:
             pActiveXUI->GetControl(IID_IWebBrowser2, (void**)&pWebBrowser);
 
             if (pWebBrowser) {
-                pWebBrowser->Navigate(L"http://www.google.com/", NULL, NULL, NULL, NULL);
+                pWebBrowser->Navigate(L"http://www.cn.bing.com/", NULL, NULL, NULL, NULL);
                 pWebBrowser->Release();
             }
         }

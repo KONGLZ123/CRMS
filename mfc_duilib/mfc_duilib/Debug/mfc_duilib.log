@@ -1,2 +1,9 @@
-﻿  mfc_duilib.vcxproj -> E:\MFC_CODE\ComputerRoomMS\mfc_duilib\Debug\mfc_duilib.exe
+﻿  mfc_duilib.cpp
+e:\mfc_code\computerroomms\mfc_duilib\mfc_duilib\duilib\core\uimanager.h(45): warning C4091: “typedef ”: 没有声明变量时忽略“DuiLib::EVENTTYPE_UI”的左侧
+  正在生成代码...
+  正在编译...
+  mfc_duilibDlg.cpp
+e:\mfc_code\computerroomms\mfc_duilib\mfc_duilib\duilib\core\uimanager.h(45): warning C4091: “typedef ”: 没有声明变量时忽略“DuiLib::EVENTTYPE_UI”的左侧
+  正在生成代码...
+  mfc_duilib.vcxproj -> E:\MFC_CODE\ComputerRoomMS\mfc_duilib\Debug\mfc_duilib.exe
   mfc_duilib.vcxproj -> E:\MFC_CODE\ComputerRoomMS\mfc_duilib\Debug\mfc_duilib.pdb (Partial PDB)
