@@ -60,6 +60,7 @@ struct WordCount
     int count;
 };
 
+// 递归层次太深，CPU耗费严重？
 void QuickSort(std::vector<struct WordCount> &vecWordCount, 
     std::vector<struct WordCount>::iterator start, 
     std::vector<struct WordCount>::iterator end)
