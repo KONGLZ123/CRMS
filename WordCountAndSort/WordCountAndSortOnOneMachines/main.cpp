@@ -103,19 +103,23 @@ int main(int argc, char *argv[])
     }
 
     // 3. 多路归并排序，将文件合并为一个
-    int a[] = { 4, 1, 2, 3, 6, 5 };
+    int a[] = { 4, 100, 3, 6, 5, 123, 111 };
 
     int i, j;
-    int tmp[6];
+    
     int index = 0;
-    int cnt = 6;
-    int m, n;
-    for (int step = 1; step <= 6; ++step) {
-        m = i = 0;
-        n = j = i + step;
-        while (i < j && j < cnt) {
-            while (i < step && j < 2*step) {
-                if (a[i] > a[j]) {
+    int cnt = sizeof(a) / sizeof(int);
+    int tmp[7];
+    int iEnd, jEnd;
+    for (int step = 1; step <= cnt; step *= 2) {
+        i = 0;
+        j = i + step;
+        iEnd = j;
+        jEnd = iEnd + step;
+        index = 0;
+        while (i < j && j <= cnt) {
+            while (i < iEnd && j < std::min(cnt, jEnd)) {
+                if (a[i] >= a[j]) {
                     tmp[index++] = a[i];
                     i++;
                 }
@@ -124,21 +128,24 @@ int main(int argc, char *argv[])
                     j++;
                 }
             }
-            while (i < step) {
+            while (i < iEnd) {
                 tmp[index++] = a[i];
                 i++;
             }
-            while (j < 2*step) {
+            while (j < std::min(cnt, jEnd)) {
                 tmp[index++] = a[j];
                 j++;
             }
-            m = n + 1;
-            n = m + step;
-            i = m;
-            j = n;
+            i = j;
+            j = i + step;
+            iEnd = j;
+            jEnd = iEnd + step;
+        }
+        //std::swap(a, tmp);    // 最后结果可能swap不到a
+        for (int i = 0; i < cnt; ++i) {
+            a[i] = tmp[i];
         }
     }
-
 
     // 4. 释放资源
     infile1.close();
