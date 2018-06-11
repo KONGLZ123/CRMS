@@ -7,6 +7,9 @@
 #include <unistd.h>     // read/write/close
 #include <iostream>
 #include <functional>
+#include <thread>
+
+using namespace std::placeholders;  // for _1, _2, ...
 
 void runClient(const char *srvAddr, const uint16_t port)
 {
@@ -101,62 +104,57 @@ public:
         addr_.sin_port = htons(port);
 
         this->connectCb(std::bind(TcpClient::onConnectCallback));
-        this->messageCb(std::bind(TcpClient::onMessageCallback));
+        this->messageCb(std::bind(TcpClient::onMessageCallback, _1, _2));
     }
     ~TcpClient()
     {
         ::close(fd_);
     }
 
-    bool connect() 
+    bool connect()
     {
         int res = ::connect(fd_, (struct sockaddr*)&addr_, sizeof(addr_));
         if (res == -1)
             return false;
-        connectCb_();
-        return true;
-    }
 
-    void start()
-    {
-        if (!connect()) {
-            // retry connect
-            return;
-        }
-            
+        connectCb_();
 
         int nr = 0;
         char buf[1024];
         while (1) {
             while ((nr = read(fd_, buf, sizeof(buf))) > 0) {
-                messageCb_();
+                // 分多次读取
+                messageCb_(std::string(buf), sizeof(buf));
             }
         }
+        return true;
     }
 
     void send(const std::string buf, int bufsize)
     {
+        // buf 太大分多次发送
         write(fd_, buf.c_str(), buf.size());
     }
 
     static void onConnectCallback()
     {
-
+        printf("onConnectCallback\n");
     }
 
-    static void onMessageCallback()    // message input
+    static void onMessageCallback(std::string buf, int len)    // message input
     {
-
+        printf("onMessagecCallback: %s\n", buf);
     }
     
 private:
+    typedef std::function<void(std::string, int)> MessageCbFunc;
     TcpClient & operator=(TcpClient & rhs) {}
 
     void connectCb(std::function<void()> cb) { connectCb_ = cb; }
-    void messageCb(std::function<void()> cb) { messageCb_ = cb; }
+    void messageCb(MessageCbFunc cb) { messageCb_ = cb; }
 
     std::function<void()> connectCb_;
-    std::function<void()> messageCb_;
+    MessageCbFunc messageCb_;
     struct sockaddr_in addr_;
     int fd_;
 };
@@ -167,44 +165,120 @@ public:
     TcpServer(uint16_t port)
         : port_(port)
     {
+        printf("TcpServer\n");
         fd_ = socket(AF_INET, SOCK_STREAM, 0);
         if (fd_ == -1) {
             printf("create socket error\n");
         }
 
-        struct sockaddr_in srvAddr;
-        srvAddr.sin_family = AF_INET;
-        srvAddr.sin_addr.s_addr = htonl(INADDR_ANY);
-        srvAddr.sin_port = htons(port);
-        if (bind(fd_, (struct sockaddr*)&srvAddr, sizeof(srvAddr)) == -1) {
+        addr_.sin_family = AF_INET;
+        addr_.sin_addr.s_addr = htonl(INADDR_ANY);
+        addr_.sin_port = htons(port);
+        if (bind(fd_, (struct sockaddr*)&addr_, sizeof(addr_)) == -1) {
             printf("bind error\n");
         }
+
+        connectCb(std::bind(TcpServer::onConnectionCallback, _1));
+        messageCb(std::bind(TcpServer::onMessageCallback, _1, _2, _3));
     }
     ~TcpServer()
     {
+        printf("TcpServer\n");
         close(fd_);
     }
 
     bool start()
     {
+        printf("start\n");
+        if (listen(fd_, 10) == -1) {
+            printf("listen error\n");
+        }
 
+        struct sockaddr connAddr;
+        socklen_t addrlen = sizeof(connAddr);   // socklen_t 变量名
+        int connfd = -1;
+        int nr = 0;
+        char buf[256];
+        while (1) {
+            connfd = accept(fd_, (struct sockaddr*)&connAddr, &addrlen);
+            //printf("accept address: %s, connfd: %d\n", inet_ntoa(connAddr.sin_addr), connfd);
+            connectCb_(connfd);
+
+            std::thread([](messageCb_, connfd) {
+                int nr = 0;
+                char buf[256];
+                while (1) {
+                    if (connfd != -1) {
+                        while ((nr = :::read(connfd, buf, sizeof(buf))) > 0) {
+                            buf[nr] = '\0';
+                            //printf("recv: %s\n", buf);
+                            messageCb_(connfd, std::string(buf), sizeof(buf));
+                            //write(connfd, buf, sizeof(buf));
+                        }
+                        //close(connfd);
+                        //printf("server close connfd: %d\n", connfd);
+                    }
+                }
+            });
+
+
+        }
+    }
+
+    static void onConnectionCallback(int connfd)
+    {
+        printf("onConnectionCallback connfd: %d\n", connfd);
+        //std::thread([](connfd) {
+        //    while (1) {
+        //        int nr = 0;
+        //        char buf[256];
+        //        while ((nr = read(connfd, buf, sizeof(buf))) > 0) {
+        //            buf[nr] = '\0';
+        //            printf("recv: %s\n", buf);
+        //            //write(connfd, buf, sizeof(buf));
+        //            //messageCb_();
+        //        }
+        //    }
+        //});
+    }
+
+    static void onMessageCallback(int connfd, std::string buf, int len)
+    {
+        printf("onMessageCallback: %s\n", buf);
     }
 
 private:
-    uint16_t port_;
+    typedef std::function<void(int, std::string, int)> MessageCbFunc;
+    void connectCb(std::function<void(int)> cb) { connectCb_ = cb; }
+    void messageCb(MessageCbFunc cb) { messageCb_ = cb; }
+
     int fd_;
+    struct sockaddr_in addr_;
+    uint16_t port_;
+    std::function<void(int)> connectCb_;
+    MessageCbFunc messageCb_;
 };
 
 int main(int argc, char *argv[])
 {
     if (argc == 4) {
         if (strcmp(argv[1], "-c") == 0) {
-            runClient(argv[2], static_cast<uint16_t>(atoi(argv[3])));
+            //runClient(argv[2], static_cast<uint16_t>(atoi(argv[3])));
+            TcpClient client(argv[2], static_cast<uint16_t>(atoi(argv[3])));
+            client.connect();
+            std::string data;
+            std::cin >> data;
+            while (data != "q") {
+                std::cin >> data;
+                client.send(data, data.length());
+            }
         }
     }
     else if (argc == 3) {
         if (strcmp(argv[1], "-l") == 0) {
-            runServer(static_cast<uint16_t>(atoi(argv[2])));
+            //runServer(static_cast<uint16_t>(atoi(argv[2])));
+            TcpServer server(static_cast<uint16_t>(atoi(argv[2])));
+            server.start();
         }
     }
     else {
