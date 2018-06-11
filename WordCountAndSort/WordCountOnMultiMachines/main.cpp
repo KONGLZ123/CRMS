@@ -1,3 +1,227 @@
+#include <string.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <arpa/inet.h>  // htons/htonl
+#include <unistd.h>     // read/write/close
+#include <iostream>
+#include <functional>
+
+void runClient(const char *srvAddr, const uint16_t port)
+{
+    printf("run clinet\n");
+    int fd = socket(AF_INET, SOCK_STREAM, 0);
+    if (fd == -1) {
+        printf("create socket error\n");
+    }
+
+    struct sockaddr_in addr;
+    addr.sin_family = AF_INET;
+    //addr.sin_addr.s_addr = htonl(srvAddr);
+    inet_pton(AF_INET, srvAddr, &addr.sin_addr);
+    addr.sin_port = htons(port);
+    int res = connect(fd, (struct sockaddr*)&addr, sizeof(addr));
+    if (res == -1) {
+        printf("connect error, remote server not found\n");
+    }
+
+    char buf[256];
+    do {
+        std::cin >> buf;
+        int nw = write(fd, buf, sizeof(buf));
+        if (nw != sizeof(buf))
+            printf("nw != sizeof(buf)\n");
+    } while (strcmp(buf, "q") == 0);
+
+    shutdown(fd, SHUT_WR);  // 关闭写
+
+    int nr = 0;
+    while ((nr = read(fd, buf, sizeof(buf))) > 0) {
+        
+    }
+    close(fd);
+}
+
+void runServer(const uint16_t port)
+{
+    printf("run server\n");
+
+    int fd = socket(AF_INET, SOCK_STREAM, 0);
+    if (fd == -1) {
+        printf("create socket error\n");
+    }
+
+    struct sockaddr_in srvAddr;
+    srvAddr.sin_family = AF_INET;
+    srvAddr.sin_addr.s_addr = htonl(INADDR_ANY);
+    srvAddr.sin_port = htons(port);
+    int res = bind(fd, (struct sockaddr*)&srvAddr, sizeof(srvAddr));
+    if (res == -1) {
+        printf("bind error\n");
+    }
+
+    res = listen(fd, 10);
+    if (res == -1) {
+        printf("listen error\n");
+    }
+
+    struct sockaddr connAddr;
+    socklen_t addrlen = sizeof(connAddr);   // socklen_t 变量名
+    int connfd = -1;
+    int nr = 0;
+    char buf[256];
+    while (1) {
+        connfd = accept(fd, (struct sockaddr*)&connAddr, &addrlen);
+        //printf("accept address: %s, connfd: %d\n", inet_ntoa(connAddr.sin_addr), connfd);
+        printf("accept connfd: %d\n", connfd);
+        if (connfd != -1) {
+            while ((nr = read(connfd, buf, sizeof(buf))) > 0) {
+                buf[nr] = '\0';
+                printf("recv: %s\n", buf);
+                write(connfd, buf, sizeof(buf));
+            }
+            close(connfd);
+            printf("server close connfd: %d\n", connfd);
+        }
+    }
+}
+
+class TcpClient
+{
+public:
+    TcpClient(std::string srvAddr, uint16_t port)
+    {
+        fd_ = ::socket(AF_INET, SOCK_STREAM, 0);
+        if (fd_ == -1)
+            printf("create socket error\n");
+
+        addr_.sin_family = AF_INET;
+        inet_pton(AF_INET, srvAddr.c_str(), &addr_.sin_addr);
+        addr_.sin_port = htons(port);
+
+        this->connectCb(std::bind(TcpClient::onConnectCallback));
+        this->messageCb(std::bind(TcpClient::onMessageCallback));
+    }
+    ~TcpClient()
+    {
+        ::close(fd_);
+    }
+
+    bool connect() 
+    {
+        int res = ::connect(fd_, (struct sockaddr*)&addr_, sizeof(addr_));
+        if (res == -1)
+            return false;
+        connectCb_();
+        return true;
+    }
+
+    void start()
+    {
+        if (!connect()) {
+            // retry connect
+            return;
+        }
+            
+
+        int nr = 0;
+        char buf[1024];
+        while (1) {
+            while ((nr = read(fd_, buf, sizeof(buf))) > 0) {
+                messageCb_();
+            }
+        }
+    }
+
+    void send(const std::string buf, int bufsize)
+    {
+        write(fd_, buf.c_str(), buf.size());
+    }
+
+    static void onConnectCallback()
+    {
+
+    }
+
+    static void onMessageCallback()    // message input
+    {
+
+    }
+    
+private:
+    TcpClient & operator=(TcpClient & rhs) {}
+
+    void connectCb(std::function<void()> cb) { connectCb_ = cb; }
+    void messageCb(std::function<void()> cb) { messageCb_ = cb; }
+
+    std::function<void()> connectCb_;
+    std::function<void()> messageCb_;
+    struct sockaddr_in addr_;
+    int fd_;
+};
+
+class TcpServer
+{
+public:
+    TcpServer(uint16_t port)
+        : port_(port)
+    {
+        fd_ = socket(AF_INET, SOCK_STREAM, 0);
+        if (fd_ == -1) {
+            printf("create socket error\n");
+        }
+
+        struct sockaddr_in srvAddr;
+        srvAddr.sin_family = AF_INET;
+        srvAddr.sin_addr.s_addr = htonl(INADDR_ANY);
+        srvAddr.sin_port = htons(port);
+        if (bind(fd_, (struct sockaddr*)&srvAddr, sizeof(srvAddr)) == -1) {
+            printf("bind error\n");
+        }
+    }
+    ~TcpServer()
+    {
+        close(fd_);
+    }
+
+    bool start()
+    {
+
+    }
+
+private:
+    uint16_t port_;
+    int fd_;
+};
+
+int main(int argc, char *argv[])
+{
+    if (argc == 4) {
+        if (strcmp(argv[1], "-c") == 0) {
+            runClient(argv[2], static_cast<uint16_t>(atoi(argv[3])));
+        }
+    }
+    else if (argc == 3) {
+        if (strcmp(argv[1], "-l") == 0) {
+            runServer(static_cast<uint16_t>(atoi(argv[2])));
+        }
+    }
+    else {
+        printf("Client Usage: -c server_address port\n");
+        printf("Server Usage: -l port\n");
+    }
+
+    // 0. 将网络程序封装成类
+    // 1. 客户端程序启动3个线程，connect到不同的3个服务端，为每台服务器标序号
+    // 2. 每个线程从同一文件读单词，根据hash值发送到不同的3台服务器
+    // 3. 服务器接收到数据后，排序写到文件
+    // 4. merge服务器从服务器读数据，取出topK数据
+}
+
+
+
+/*
 #include <cstdio>
 #include <string.h>
 #include <stdlib.h>
@@ -118,3 +342,5 @@ int main(int argc, char *argv[])
 
     return 0;
 }
+
+*/
