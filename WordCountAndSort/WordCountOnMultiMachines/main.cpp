@@ -143,7 +143,8 @@ public:
 
     static void onMessageCallback(std::string buf, int len)    // message input
     {
-        printf("onMessagecCallback: %s\n", buf);
+        //printf("onMessagecCallback: %s\n", buf.c_str());
+        std::cout << "onMessageCallback:" + buf << std::endl;
     }
     
 private:
@@ -204,24 +205,23 @@ public:
             //printf("accept address: %s, connfd: %d\n", inet_ntoa(connAddr.sin_addr), connfd);
             connectCb_(connfd);
 
-            std::thread([](messageCb_, connfd) {
+            std::thread([this](MessageCbFunc messageCb, int fd) {
+                printf("thread start...\n");
                 int nr = 0;
                 char buf[256];
                 while (1) {
-                    if (connfd != -1) {
-                        while ((nr = :::read(connfd, buf, sizeof(buf))) > 0) {
+                    if (fd != -1) {
+                        while ((nr = read(fd, buf, sizeof(buf))) > 0) {
                             buf[nr] = '\0';
                             //printf("recv: %s\n", buf);
-                            messageCb_(connfd, std::string(buf), sizeof(buf));
+                            messageCb(fd, std::string(buf), sizeof(buf));
                             //write(connfd, buf, sizeof(buf));
                         }
                         //close(connfd);
                         //printf("server close connfd: %d\n", connfd);
                     }
                 }
-            });
-
-
+            }, messageCb_, connfd);
         }
     }
 
@@ -244,7 +244,8 @@ public:
 
     static void onMessageCallback(int connfd, std::string buf, int len)
     {
-        printf("onMessageCallback: %s\n", buf);
+        //printf("onMessageCallback: %s\n", buf.c_str());
+        std::cout << "onMessageCallback:" + buf << std::endl;
     }
 
 private:
