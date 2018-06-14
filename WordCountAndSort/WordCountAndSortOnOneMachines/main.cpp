@@ -5,16 +5,103 @@
 #include <vector>
 #include <algorithm>
 #include <stdlib.h>
+#include <memory>
 
-void shard(int buckets)
+class Sharder
+{
+public:
+    Sharder(int buckets)
+        : buckets_(buckets)
+    {
+        char filename[256];
+        for (int i = 0; i < buckets; ++i) {
+            snprintf(filename, 256, "sharder-%05d.txt", i);
+            files_.push_back(std::ofstream(filename));
+        }
+    }
+    ~Sharder() {
+        char filename[256];
+        for (int i = 0; i < buckets_; ++i) {
+            files_[i].close();
+        }
+        files_.clear();
+    }
+
+    void outputToFile(const std::string & data, const int count) {
+        int index = std::hash<std::string>()(data) % buckets_;
+        files_.at(index) << data.c_str() << " " << count << "\n";
+    }
+
+private:
+    std::vector<std::ofstream> files_;
+    int buckets_;
+};
+
+void shard(int buckets, int inputFileCount, char *files[])
 {
     // 新建buckets个输出文件，hash操作
-    // 文件读入
+    Sharder sharder(buckets);
+    std::unordered_map<std::string, int> wordCount;
+    char data[256];
+
+    for (int i = 0; i < inputFileCount; ++i) {
+        std::ifstream file(files[i]);
+        wordCount.clear();
+
+        while (!file.eof()) {
+            file.getline(data, 256);
+            wordCount[std::string(data)]++;
+        }
+
+        for (auto it = wordCount.begin(); it != wordCount.end(); ++it) {
+            sharder.outputToFile(it->first, it->second);
+        }
+        file.close();
+    }
 }
 
-void sort_shard()
+void sort_shard(int buckets)
 {
+    char filename[256];
+    char data[256];
+    std::string str;
+    int count = 0;
+    typedef std::unordered_map<std::string, int> WordCount;
+    WordCount wordCount;
+    std::vector<std::pair<int, WordCount::const_iterator>> words;
+    for (int i = 0; i < buckets; ++i) {
+        snprintf(filename, 256, "sharder-%05d.txt", i);
+        std::ifstream file(filename);
 
+        wordCount.clear();
+        
+        while (!file.eof()) {
+            str.clear();
+            file.getline(data, 256);
+            str = data;
+            if (str != "") {
+                int split = str.find(" ");
+                count = atoi((str.substr(split, str.size() - split)).c_str());
+                str = str.substr(0, split);
+
+                wordCount[str] += count;
+            }
+        }
+        file.close();
+
+        for (auto it = wordCount.cbegin(); it != wordCount.cend(); ++it) {
+            words.push_back(std::make_pair(it->second, it));
+        }
+        std::sort(words.begin(), words.end(), [](const auto &lhs, const auto &rhs) {
+            return lhs.first > rhs.first;
+        });
+
+        std::ofstream outfile(filename);
+        for (auto it : words) {
+            outfile << it.second->first.c_str() << " " << it.first << "\n";
+        }
+        outfile.close();
+    }
 }
 
 void merge()
@@ -25,8 +112,9 @@ void merge()
 int main(int argc, char *argv[])
 {
     int buckets = 10;
-    shard(buckets);
-    sort_shard();
+    char *file[] = { "input1.txt", "input2.txt" };
+    shard(buckets, 2, file);
+    sort_shard(buckets);
     merge();
 }
 
