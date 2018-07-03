@@ -155,6 +155,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="kth.h" />
+    <ClInclude Include="kth_unittest.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="msg.proto" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

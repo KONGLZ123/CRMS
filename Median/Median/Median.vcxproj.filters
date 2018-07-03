@@ -23,5 +23,13 @@
     <ClInclude Include="kth.h">
       <Filter>源文件</Filter>
     </ClInclude>
+    <ClInclude Include="kth_unittest.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="msg.proto">
+      <Filter>源文件</Filter>
+    </None>
   </ItemGroup>
 </Project>
